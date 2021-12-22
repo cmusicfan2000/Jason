@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<WorshipService Date="2021-11-28"
+                Focus="The fruit of the Spirit, Galatians 5:22-26">
+  <Welcome/>
+  <Scripture Book="Colossians"
+             Reference="3:12-15"
+             Translation="VOICE"/>
+  <Song Title="Love, Love, Love, Love">
+    <Part Name="Verse 1"/>
+    <Part Name="Verse 2"/>
+    <Part Name="Verse 3"/>
+    <Part Name="Verse 4"/>
+  </Song>
+  <Song Title="The Joy of the Lord"
+        BookNumber="59">
+    <Part Name="Verse 1"/>
+    <Part Name="Verse 2"/>
+    <Part Name="Chorus" />
+    <Part Name="Verse 4"/>
+    <Part Name="Chorus" />
+  </Song>
+  <Song Title="The Greatest Commands"
+      BookNumber="448">
+    <Part Name="Verse 1" />
+    <Part Name="Verse 2" />
+    <Part Name="Verse 3" />
+    <Part Name="Verse 4" />
+  </Song>
+  <LordsSupper>
+    <Scripture Book="Colossians"
+               Reference="3:12-15"
+               Translation="NET"/>
+  </LordsSupper>
+  <Song Title="Faithful Love"
+      BookNumber="18">
+    <Part Name="Verse 1"/>
+    <Part Name="Chorus" />
+    <Part Name="Verse 2"/>
+    <Part Name="Chorus" />
+  </Song>
+  <Sermon Title="The fruit of the Spirit, Galatians 5:22-26"
+          Presenter="Rob McElroy"/>
+  <Song Title="What a friend We Have in Jesus"
+    BookNumber="800">
+    <Part Name="Verse 1"/>
+    <Part Name="Chorus" />
+    <Part Name="Verse 2"/>
+    <Part Name="Chorus" />
+  </Song>
+  <FamilyNewsAndPrayer/>
+</WorshipService>
