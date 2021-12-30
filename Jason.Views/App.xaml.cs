@@ -28,6 +28,9 @@ namespace Jason.Views
         /// </summary>
         public App()
         {
+            //Register Syncfusion license
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NTU2NjQ3QDMxMzkyZTM0MmUzMGtoNzdpK0tmamNPaGJzc05IbzV6WHo5akxUeVpiTndyWUhGR3ladDV6VjA9");
+
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }

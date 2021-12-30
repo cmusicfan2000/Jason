@@ -63,7 +63,7 @@ namespace Jason.ViewModels.WorshipServices
 
         #region Constructor
         public ScriptureViewModel(ScriptureType model)
-            : base(ItemsChoiceType.Sermon)
+            : base(ItemsChoiceType.Scripture)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));

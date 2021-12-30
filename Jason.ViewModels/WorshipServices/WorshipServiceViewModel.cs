@@ -1,7 +1,4 @@
-﻿using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Presentation;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
@@ -9,6 +6,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.System;
 using Windows.UI.Xaml.Input;
+using Syncfusion.Presentation;
 
 namespace Jason.ViewModels.WorshipServices
 {
@@ -113,6 +111,9 @@ namespace Jason.ViewModels.WorshipServices
                     case ItemsChoiceType.Song:
                         parts.Add(new SongViewModel(model.Items[i] as WorshipServiceSong));
                         break;
+                    case ItemsChoiceType.Prayer:
+                        parts.Add(new PrayerViewModel());
+                        break;
                     default:
                         parts.Add(new PlaceholderViewModel(model.ItemsElementName[i]));
                         break;
@@ -127,84 +128,23 @@ namespace Jason.ViewModels.WorshipServices
             if (target == null)
                 return;
 
+            // Create a new presentation
+            IPresentation presentation = Presentation.Create();
+
+            // Add each part
+            foreach (WorshipServicePartViewModel part in Parts)
+                await part.AddToPresentation(presentation);
+
+            // Save and close the presentation
             using (Stream s = (await target.OpenAsync(FileAccessMode.ReadWrite)).AsStream())
             {
-                // Create a new presentation
-                PresentationDocument presentationDoc = PresentationDocument.Create(s, PresentationDocumentType.Presentation);
-                PresentationPart presentationPart = presentationDoc.AddPresentationPart();
-                presentationPart.Presentation = new Presentation();
-
-                foreach (WorshipServicePartViewModel part in Parts)
-                    part.AddToPowerpoint(presentationPart.Presentation);
-
-                //Saves changes to the specified storage file and close the open xml presentation
-                presentationDoc.Save();
-                presentationDoc.Close();
+                presentation.Save(s);
             }
+            presentation.Close();
 
-            // Open it in powerpoint
+            // Open the presentation in powerpoint
             await Launcher.LaunchFileAsync(target);
         }
-
-        //private void AddSongSection(IPresentation presentation, SongViewModel song)
-        //{
-        //    ISection section = presentation.Sections.Add();
-        //    section.Name = song.Title;
-        //    ISlide slide = section.AddSlide(SlideLayoutType.TitleOnly);
-        //    IShape titleShape = slide.Shapes[0] as IShape;
-        //    titleShape.TextBody.AddParagraph("Insert Content Here").HorizontalAlignment = HorizontalAlignmentType.Center;
-        //}
-
-        //private void AddScriptureSection(IPresentation presentation, ScriptureViewModel scripture)
-        //{
-        //    ISection section = presentation.Sections.Add();
-        //    section.Name = $"{scripture.Book} {scripture.Reference}";
-        //    ISlide slide = section.AddSlide(SlideLayoutType.TitleOnly);
-        //    IShape titleShape = slide.Shapes[0] as IShape;
-        //    titleShape.TextBody.AddParagraph("Insert Content Here").HorizontalAlignment = HorizontalAlignmentType.Center;
-        //}
-
-        //private void AddLordsSupperSection(IPresentation presentation, LordsSupperViewModel lordsSupper)
-        //{
-        //    ISection section = presentation.Sections.Add();
-        //    section.Name = "Lord's Supper";
-        //    ISlide slide = section.AddSlide(SlideLayoutType.TitleOnly);
-        //    IShape titleShape = slide.Shapes[0] as IShape;
-        //    titleShape.TextBody.AddParagraph("Insert Content Here").HorizontalAlignment = HorizontalAlignmentType.Center;
-        //}
-
-        //private void AddFamilyNewsAndPrayerSection(IPresentation presentation)
-        //{
-        //    ISection section = presentation.Sections.Add();
-        //    section.Name = "Family News and Prayer";
-        //    ISlide slide = section.AddSlide(SlideLayoutType.TitleOnly);
-        //    IShape titleShape = slide.Shapes[0] as IShape;
-        //    titleShape.TextBody.AddParagraph("Insert Content Here").HorizontalAlignment = HorizontalAlignmentType.Center;
-        //}
-
-        //private void AddSermonSection(IPresentation presentation)
-        //{
-        //    ISection section = presentation.Sections.Add();
-        //    section.Name = "Sermon";
-        //}
-
-        //private void AddWelcomeSection(IPresentation presentation)
-        //{
-        //    ISection section = presentation.Sections.Add();
-        //    section.Name = "Welcome";
-        //    ISlide slide = section.AddSlide(SlideLayoutType.TitleOnly);
-        //    IShape titleShape = slide.Shapes[0] as IShape;
-        //    titleShape.TextBody.AddParagraph("Insert Content Here").HorizontalAlignment = HorizontalAlignmentType.Center;
-        //}
-
-        //private void AddPrayerSection(IPresentation presentation)
-        //{
-        //    ISection section = presentation.Sections.Add();
-        //    section.Name = "Prayer";
-        //    ISlide slide = section.AddSlide(SlideLayoutType.TitleOnly);
-        //    IShape titleShape = slide.Shapes[0] as IShape;
-        //    titleShape.TextBody.AddParagraph("Insert Content Here").HorizontalAlignment = HorizontalAlignmentType.Center;
-        //}
         #endregion
 
         #region Event Handlers

@@ -1,7 +1,6 @@
-﻿using DocumentFormat.OpenXml.Office2010.PowerPoint;
-using DocumentFormat.OpenXml.Presentation;
-using Jason.ViewModels.Extensions;
+﻿using Syncfusion.Presentation;
 using System;
+using System.Threading.Tasks;
 
 namespace Jason.ViewModels.WorshipServices
 {
@@ -34,26 +33,22 @@ namespace Jason.ViewModels.WorshipServices
         /// <summary>
         /// Adds this worship service part to an OpenXML powerpoint presentation
         /// </summary>
-        protected void AddToSection(Section section)
-        {
-            Slide titleSlide = new Slide();
-            titleSlide.AddTitle(PartName);
-            section.AddSlide(titleSlide);
-        }
+        protected virtual Task AddToSection(ISection section) => Task.CompletedTask;
 
         /// <summary>
         /// Adds this worship service part to an OpenXML powerpoint presentation
         /// </summary>
-        public void AddToPowerpoint(Presentation presentation)
+        public async Task AddToPresentation(IPresentation presentation)
         {
             if (presentation == null)
                 throw new ArgumentNullException(nameof(presentation));
 
-            // Add a new section
-            Section section = presentation.AddSection(PartName);
+            // Create a new section
+            ISection partSection = presentation.Sections.Add();
+            partSection.Name = PartName;
 
-            // Add the part to the section
-            AddToSection(section);
+            // Add the appropraite slides to it
+            await AddToSection(partSection);
         }
         #endregion
     }
