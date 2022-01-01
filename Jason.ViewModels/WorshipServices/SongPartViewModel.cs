@@ -5,7 +5,7 @@ namespace Jason.ViewModels.WorshipServices
     public class SongPartViewModel : ViewModel
     {
         #region Fields
-        private readonly WorshipServiceSongPart model;
+        private readonly SongPart model;
         #endregion
 
         #region Properties
@@ -27,7 +27,7 @@ namespace Jason.ViewModels.WorshipServices
         #endregion
 
         #region Constructor
-        public SongPartViewModel(WorshipServiceSongPart model)
+        public SongPartViewModel(SongPart model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));

@@ -7,6 +7,7 @@ using Windows.Storage.Pickers;
 using Windows.System;
 using Windows.UI.Xaml.Input;
 using Syncfusion.Presentation;
+using Jason.Models;
 
 namespace Jason.ViewModels.WorshipServices
 {
@@ -22,12 +23,12 @@ namespace Jason.ViewModels.WorshipServices
         /// </summary>
         public DateTime Date
         {
-            get => model.Date;
+            get => model.Order.Date;
             set
             {
-                if (model.Date != value)
+                if (model.Order.Date != value)
                 {
-                    model.Date = value;
+                    model.Order.Date = value;
                     InvokePropertyChanged();
                 }
             }
@@ -38,12 +39,12 @@ namespace Jason.ViewModels.WorshipServices
         /// </summary>
         public string Focus
         {
-            get => model.Focus;
+            get => model.Order.Focus;
             set
             {
-                if (model.Focus != value)
+                if (model.Order.Focus != value)
                 {
-                    model.Focus = value;
+                    model.Order.Focus = value;
                     InvokePropertyChanged();
                 }
             }
@@ -95,32 +96,21 @@ namespace Jason.ViewModels.WorshipServices
 
             this.model = model;
             parts = new ObservableCollection<WorshipServicePartViewModel>();
-            for (int i = 0; i < model.Items.Length; i++)
+
+            foreach (object item in model.Order.Items)
             {
-                switch (model.ItemsElementName[i])
-                {
-                    case ItemsChoiceType.LordsSupper:
-                        parts.Add(new LordsSupperViewModel(model.Items[i] as WorshipServiceLordsSupper));
-                        break;
-                    case ItemsChoiceType.Scripture:
-                        parts.Add(new ScriptureViewModel(model.Items[i] as ScriptureType));
-                        break;
-                    case ItemsChoiceType.Sermon:
-                        parts.Add(new SermonViewModel(model.Items[i] as WorshipServiceSermon));
-                        break;
-                    case ItemsChoiceType.Song:
-                        parts.Add(new SongViewModel(model.Items[i] as WorshipServiceSong));
-                        break;
-                    case ItemsChoiceType.Prayer:
-                        parts.Add(new PrayerViewModel());
-                        break;
-                    case ItemsChoiceType.FamilyNewsAndPrayer:
-                        parts.Add(new FamilyNewsAndPrayerViewModel());
-                        break;
-                    default:
-                        parts.Add(new PlaceholderViewModel(model.ItemsElementName[i]));
-                        break;
-                }
+                if (item is LordsSupper lsItem)
+                    parts.Add(new LordsSupperViewModel(lsItem));
+                else if (item is Scripture sItem)
+                    parts.Add(new ScriptureViewModel(sItem));
+                else if (item is Sermon srItem)
+                    parts.Add(new SermonViewModel(srItem));
+                else if (item is Song songItem)
+                    parts.Add(new SongViewModel(songItem));
+                else if (item is FamilyNewsAndPrayer)
+                    parts.Add(new FamilyNewsAndPrayerViewModel());
+                else if (item is Placeholder ph)
+                    parts.Add(new PlaceholderViewModel(ph, model));
             }
         }
         #endregion

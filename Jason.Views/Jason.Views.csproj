@@ -133,12 +133,6 @@
     <Compile Include="WorshipServiceParts\GenericPartView.xaml.cs">
       <DependentUpon>GenericPartView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WorshipServiceParts\LordsSupperView.xaml.cs">
-      <DependentUpon>LordsSupperView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="WorshipServiceParts\ScriptureView.xaml.cs">
-      <DependentUpon>ScriptureView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="WorshipServiceParts\SongView.xaml.cs">
       <DependentUpon>SongView.xaml</DependentUpon>
     </Compile>
@@ -176,14 +170,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WorshipServiceParts\GenericPartView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WorshipServiceParts\LordsSupperView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WorshipServiceParts\ScriptureView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

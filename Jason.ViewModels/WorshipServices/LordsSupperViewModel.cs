@@ -5,7 +5,7 @@ namespace Jason.ViewModels.WorshipServices
     public class LordsSupperViewModel : WorshipServicePartViewModel
     {
         #region Fields
-        private readonly WorshipServiceLordsSupper model;
+        private readonly LordsSupper model;
         #endregion
 
         #region Properties
@@ -24,11 +24,12 @@ namespace Jason.ViewModels.WorshipServices
                 return scripture;
             }
         }
+
+        public override string DisplayName => $"Lord's Supper: {Scripture.Book} {Scripture.Reference} ({Scripture.Translation})";
         #endregion
 
         #region Constructor
-        public LordsSupperViewModel(WorshipServiceLordsSupper model)
-            : base(ItemsChoiceType.LordsSupper)
+        public LordsSupperViewModel(LordsSupper model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));

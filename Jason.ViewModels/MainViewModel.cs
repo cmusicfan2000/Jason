@@ -1,4 +1,5 @@
-﻿using Jason.Models.Repositories;
+﻿using Jason.Models;
+using Jason.Models.Repositories;
 using Jason.ViewModels.WorshipServices;
 using System;
 using System.Collections.ObjectModel;
@@ -83,25 +84,14 @@ namespace Jason.ViewModels
         #region Event Handlers
         private async void OnOpenServiceCommandExecuteRequested(XamlUICommand sender, ExecuteRequestedEventArgs args)
         {
-            var picker = new FileOpenPicker()
+            var repo = new WorshipServiceRepository();
+            WorshipService ws = await repo.GetWorshipServiceAsync();
+
+            if (ws != null)
             {
-                ViewMode = PickerViewMode.List,
-                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
-            };
-            picker.FileTypeFilter.Add(".xml");
-
-            var file = await picker.PickSingleFileAsync();
-
-            if (file != null)
-            {
-                var repo = new WorshipServiceRepository();
-
                 try
                 {
-                    WorshipService ws = await repo.GetWorshipServiceAsync(file);
-
-                    if (ws != null)
-                        WorshipService = new WorshipServiceViewModel(ws);
+                    WorshipService = new WorshipServiceViewModel(ws);
                 }
                 catch (Exception ex)
                 {

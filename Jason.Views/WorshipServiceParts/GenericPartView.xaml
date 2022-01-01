@@ -7,5 +7,5 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-    <TextBlock Text="{Binding PartName}"/>
+    <TextBlock Text="{Binding DisplayName}"/>
 </UserControl>

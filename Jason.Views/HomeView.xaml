@@ -17,16 +17,6 @@
                     <wspViews:SongView/>
                 </DataTemplate>
             </views:WorshipServicePartTemplateSelector.SongTemplate>
-            <views:WorshipServicePartTemplateSelector.ScriptureTemplate>
-                <DataTemplate>
-                    <wspViews:ScriptureView/>
-                </DataTemplate>
-            </views:WorshipServicePartTemplateSelector.ScriptureTemplate>
-            <views:WorshipServicePartTemplateSelector.LordsSupperTemplate>
-                <DataTemplate>
-                    <wspViews:LordsSupperView/>
-                </DataTemplate>
-            </views:WorshipServicePartTemplateSelector.LordsSupperTemplate>
             <views:WorshipServicePartTemplateSelector.GenericTemplate>
                 <DataTemplate>
                     <wspViews:GenericPartView/>

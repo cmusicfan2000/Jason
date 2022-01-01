@@ -1,5 +1,4 @@
-﻿using Syncfusion.Presentation;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -8,7 +7,7 @@ namespace Jason.ViewModels.WorshipServices
     public class SongViewModel : WorshipServicePartViewModel
     {
         #region Fields
-        private readonly WorshipServiceSong model;
+        private readonly Song model;
         #endregion
 
         #region Properties
@@ -63,11 +62,14 @@ namespace Jason.ViewModels.WorshipServices
                 return roParts;
             }
         }
+
+
+        public override string DisplayName => BookNumber == null ? $"Song: {Title}"
+                                                                 : $"Song: {Title} (#{BookNumber})";
         #endregion
 
         #region Constructor
-        public SongViewModel(WorshipServiceSong model)
-            : base(ItemsChoiceType.Song)
+        public SongViewModel(Song model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -75,29 +77,6 @@ namespace Jason.ViewModels.WorshipServices
             this.model = model;
             parts = new ObservableCollection<SongPartViewModel>(model.Part.Select(p => new SongPartViewModel(p)));
         }
-        #endregion
-
-        #region Methods
-        //protected override void AddToSection(ISection section)
-        //{
-        //    // Add a blank slide to it
-        //    ISlide slide = section.Slides.Add(SlideLayoutType.Blank);
-
-        //    //Adds a textbox in a slide by specifying its position and size
-        //    IShape textShape = slide.AddTextBox(100, 75, 756, 200);
-
-        //    //Adds a paragraph into the textShape
-        //    IParagraph paragraph = textShape.TextBody.AddParagraph();
-
-        //    //Set the horizontal alignment of paragraph
-        //    paragraph.HorizontalAlignment = HorizontalAlignmentType.Center;
-
-        //    //Adds a textPart in the paragraph
-        //    ITextPart textPart = paragraph.AddTextPart(PartName);
-
-        //    //Applies font formatting to the text
-        //    textPart.Font.FontSize = 80;
-        //}
         #endregion
     }
 }
