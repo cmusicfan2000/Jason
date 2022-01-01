@@ -6,27 +6,11 @@ namespace Jason.ViewModels.WorshipServices
 {
     public abstract class WorshipServicePartViewModel : ViewModel
     {
+        #region Properties
         /// <summary>
-        /// Gets the name of the part
+        /// Gets a display-friendly name for the part
         /// </summary>
-        public string PartName { get; }
-
-        #region Constructor
-        public WorshipServicePartViewModel(ItemsChoiceType type)
-        {
-            switch (type)
-            {
-                case ItemsChoiceType.FamilyNewsAndPrayer:
-                    PartName = "Family News and Prayer";
-                    break;
-                case ItemsChoiceType.LordsSupper:
-                    PartName = "Lord's Supper";
-                    break;
-                default:
-                    PartName = type.ToString();
-                    break;
-            }
-        }
+        public abstract string DisplayName { get; }
         #endregion
 
         #region Methods
@@ -45,7 +29,7 @@ namespace Jason.ViewModels.WorshipServices
 
             // Create a new section
             ISection partSection = presentation.Sections.Add();
-            partSection.Name = PartName;
+            partSection.Name = DisplayName;
 
             // Add the appropraite slides to it
             try
@@ -70,7 +54,7 @@ namespace Jason.ViewModels.WorshipServices
                 paragraph.HorizontalAlignment = HorizontalAlignmentType.Center;
 
                 //Adds a textPart in the paragraph
-                ITextPart textPart = paragraph.AddTextPart("Family News and Prayer");
+                ITextPart textPart = paragraph.AddTextPart(partSection.Name);
 
                 //Applies font formatting to the text
                 textPart.Font.FontSize = 80;

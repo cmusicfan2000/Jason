@@ -7,8 +7,7 @@ namespace Jason.ViewModels.WorshipServices
 {
     public class FamilyNewsAndPrayerViewModel : WorshipServicePartViewModel
     {
-        public FamilyNewsAndPrayerViewModel()
-            : base(ItemsChoiceType.FamilyNewsAndPrayer) { }
+        public override string DisplayName => "Family News and Prayer";
 
         protected override async Task AddToSection(ISection section)
         {

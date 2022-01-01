@@ -5,7 +5,7 @@ namespace Jason.ViewModels.WorshipServices
     public class ScriptureViewModel : WorshipServicePartViewModel
     {
         #region Fields
-        private readonly ScriptureType model;
+        private readonly Scripture model;
         #endregion
 
         #region Properties
@@ -31,7 +31,7 @@ namespace Jason.ViewModels.WorshipServices
         /// <summary>
         /// Gets or sets the book from which the scripture comes
         /// </summary>
-        public ScriptureTypeBook Book
+        public ScriptureBook Book
         {
             get => model.Book;
             set
@@ -47,7 +47,7 @@ namespace Jason.ViewModels.WorshipServices
         /// <summary>
         /// Gets or sets the translation being referenced
         /// </summary>
-        public ScriptureTypeTranslation Translation
+        public ScriptureTranslation Translation
         {
             get => model.Translation;
             set
@@ -59,11 +59,12 @@ namespace Jason.ViewModels.WorshipServices
                 }
             }
         }
+
+        public override string DisplayName => $"Scripture: {Book} {Reference} ({Translation})";
         #endregion
 
         #region Constructor
-        public ScriptureViewModel(ScriptureType model)
-            : base(ItemsChoiceType.Scripture)
+        public ScriptureViewModel(Scripture model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));

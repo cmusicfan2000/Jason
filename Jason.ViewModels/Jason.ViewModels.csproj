@@ -122,11 +122,9 @@
   <ItemGroup>
     <Compile Include="MainViewModel.cs" />
     <Compile Include="RecentServiceViewModel.cs" />
-    <Compile Include="WorshipServices\WelcomeViewModel.cs" />
     <Compile Include="WorshipServices\LordsSupperViewModel.cs" />
     <Compile Include="WorshipServices\PlaceholderViewModel.cs" />
     <Compile Include="WorshipServices\FamilyNewsAndPrayerViewModel.cs" />
-    <Compile Include="WorshipServices\PrayerViewModel.cs" />
     <Compile Include="WorshipServices\SermonViewModel.cs" />
     <Compile Include="WorshipServices\ScriptureViewModel.cs" />
     <Compile Include="WorshipServices\SongViewModel.cs" />

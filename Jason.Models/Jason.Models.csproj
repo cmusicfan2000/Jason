@@ -123,8 +123,10 @@
     <Compile Include="Repositories\RecentFilesRepository.cs" />
     <Compile Include="Repositories\SettingsRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WorshipService.cs" />
     <Compile Include="Repositories\WorshipServiceRepository.cs" />
+    <Compile Include="WorshipService.cs" />
+    <Compile Include="WorshipServiceImage.cs" />
+    <Compile Include="WorshipServiceOrder.cs" />
     <EmbeddedResource Include="Properties\Jason.Models.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -140,7 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GenerateModels.bat" />
-    <EmbeddedResource Include="XML\WorshipService.xsd">
+    <EmbeddedResource Include="XML\WorshipServiceOrder.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
