@@ -18,7 +18,7 @@ namespace Jason.Views
         private readonly List<(NavigationOptions Tag, Type PageType)> pages = new List<(NavigationOptions Tag, Type PageType)>
         {
             (NavigationOptions.Home, typeof(HomeView)),
-            (NavigationOptions.PaperlessHymnalSettings, typeof(PaperlessHymnalSettingsView)),
+            (NavigationOptions.Settings, typeof(SettingsView)),
             (NavigationOptions.Open, typeof(HomeView))
         };
         #endregion

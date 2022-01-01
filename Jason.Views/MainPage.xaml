@@ -36,11 +36,10 @@
             <NavigationViewItemSeparator/>
             <!--<NavigationViewItem Content="11-21-2021"/>
             <NavigationViewItemSeparator/>-->
-            <NavigationViewItemHeader Content="Settings"/>
-            <NavigationViewItem Content="Paperless Hymnal"
+            <NavigationViewItem Content="Settings"
                                 Icon="BrowsePhotos">
                 <NavigationViewItem.Tag>
-                    <enums:NavigationOptions>PaperlessHymnalSettings</enums:NavigationOptions>
+                    <enums:NavigationOptions>Settings</enums:NavigationOptions>
                 </NavigationViewItem.Tag>
             </NavigationViewItem>
         </NavigationView.MenuItems>

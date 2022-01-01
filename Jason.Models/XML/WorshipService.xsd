@@ -98,7 +98,7 @@
       <xs:sequence>
         <xs:choice maxOccurs="unbounded">
           <xs:element name="Welcome"
-                      maxOccurs="1"/>
+                      maxOccurs="unbounded"/>
           <xs:element name="Prayer"
                       maxOccurs="unbounded"/>
           <xs:element name="Scripture"
@@ -141,7 +141,7 @@
             </xs:complexType>
           </xs:element>
           <xs:element name="Sermon"
-                      maxOccurs="1">
+                      maxOccurs="unbounded">
             <xs:complexType>
               <xs:attribute name="Title"
                             type="xs:string"
@@ -152,6 +152,8 @@
             </xs:complexType>
           </xs:element>
           <xs:element name="FamilyNewsAndPrayer"
+                      maxOccurs="1"/>
+          <xs:element name="Goodbye"
                       maxOccurs="1"/>
         </xs:choice>
       </xs:sequence>

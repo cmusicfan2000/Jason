@@ -34,6 +34,7 @@ public partial class WorshipService {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute("FamilyNewsAndPrayer", typeof(object))]
+    [System.Xml.Serialization.XmlElementAttribute("Goodbye", typeof(object))]
     [System.Xml.Serialization.XmlElementAttribute("LordsSupper", typeof(WorshipServiceLordsSupper))]
     [System.Xml.Serialization.XmlElementAttribute("Prayer", typeof(object))]
     [System.Xml.Serialization.XmlElementAttribute("Scripture", typeof(ScriptureType))]
@@ -524,6 +525,9 @@ public enum ItemsChoiceType {
     
     /// <remarks/>
     FamilyNewsAndPrayer,
+    
+    /// <remarks/>
+    Goodbye,
     
     /// <remarks/>
     LordsSupper,

@@ -6,7 +6,7 @@
     public enum NavigationOptions
     {
         Home,
-        PaperlessHymnalSettings,
+        Settings,
         Open
     }
 }
