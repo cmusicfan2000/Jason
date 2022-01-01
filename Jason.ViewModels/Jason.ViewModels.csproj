@@ -122,8 +122,10 @@
   <ItemGroup>
     <Compile Include="MainViewModel.cs" />
     <Compile Include="RecentServiceViewModel.cs" />
+    <Compile Include="WorshipServices\WelcomeViewModel.cs" />
     <Compile Include="WorshipServices\LordsSupperViewModel.cs" />
     <Compile Include="WorshipServices\PlaceholderViewModel.cs" />
+    <Compile Include="WorshipServices\FamilyNewsAndPrayerViewModel.cs" />
     <Compile Include="WorshipServices\PrayerViewModel.cs" />
     <Compile Include="WorshipServices\SermonViewModel.cs" />
     <Compile Include="WorshipServices\ScriptureViewModel.cs" />
@@ -152,6 +154,10 @@
       <Project>{920beb28-0aa8-4d94-b7ff-f7eaf0ef2056}</Project>
       <Name>Jason.Models</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\FamilyNewsandPrayer.jpg" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

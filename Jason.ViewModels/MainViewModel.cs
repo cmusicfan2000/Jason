@@ -88,7 +88,6 @@ namespace Jason.ViewModels
                 ViewMode = PickerViewMode.List,
                 SuggestedStartLocation = PickerLocationId.DocumentsLibrary
             };
-            picker.FileTypeFilter.Add(".ws");
             picker.FileTypeFilter.Add(".xml");
 
             var file = await picker.PickSingleFileAsync();

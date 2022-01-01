@@ -114,6 +114,9 @@ namespace Jason.ViewModels.WorshipServices
                     case ItemsChoiceType.Prayer:
                         parts.Add(new PrayerViewModel());
                         break;
+                    case ItemsChoiceType.FamilyNewsAndPrayer:
+                        parts.Add(new FamilyNewsAndPrayerViewModel());
+                        break;
                     default:
                         parts.Add(new PlaceholderViewModel(model.ItemsElementName[i]));
                         break;

@@ -48,7 +48,33 @@ namespace Jason.ViewModels.WorshipServices
             partSection.Name = PartName;
 
             // Add the appropraite slides to it
-            await AddToSection(partSection);
+            try
+            {
+                await AddToSection(partSection);
+            }
+            catch
+            {
+                // Clear any slides from the section
+                partSection.Slides.Clear();
+
+                // Add a blank slide to the section
+                ISlide slide = partSection.Slides.Add(SlideLayoutType.Blank);
+
+                //Adds a textbox in a slide by specifying its position and size
+                IShape textShape = slide.AddTextBox(100, 75, 756, 200);
+
+                //Adds a paragraph into the textShape
+                IParagraph paragraph = textShape.TextBody.AddParagraph();
+
+                //Set the horizontal alignment of paragraph
+                paragraph.HorizontalAlignment = HorizontalAlignmentType.Center;
+
+                //Adds a textPart in the paragraph
+                ITextPart textPart = paragraph.AddTextPart("Family News and Prayer");
+
+                //Applies font formatting to the text
+                textPart.Font.FontSize = 80;
+            }
         }
         #endregion
     }
