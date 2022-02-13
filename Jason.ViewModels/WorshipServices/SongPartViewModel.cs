@@ -51,7 +51,7 @@ namespace Jason.ViewModels.WorshipServices
             {
                 if (int.TryParse(slideNumberString, out int slideNumber))
                 {
-                    ISlide slideAtIndex = presentation.Slides[slideNumber];
+                    ISlide slideAtIndex = presentation.Slides[slideNumber - 1];
 
                     if (slideAtIndex != null)
                         slides.Add(slideAtIndex);
