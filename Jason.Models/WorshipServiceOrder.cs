@@ -474,7 +474,19 @@ public partial class Placeholder : ImageBackground {
 [System.ComponentModel.DesignerCategoryAttribute("code")]
 public partial class SongPart {
     
+    private string slidesField;
+    
     private string nameField;
+    
+    /// <remarks/>
+    public string Slides {
+        get {
+            return this.slidesField;
+        }
+        set {
+            this.slidesField = value;
+        }
+    }
     
     /// <remarks/>
     [System.Xml.Serialization.XmlAttributeAttribute()]
@@ -499,6 +511,8 @@ public partial class Song {
     
     private string titleField;
     
+    private string slideshowField;
+    
     private ushort bookNumberField;
     
     private bool bookNumberFieldSpecified;
@@ -522,6 +536,17 @@ public partial class Song {
         }
         set {
             this.titleField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Slideshow {
+        get {
+            return this.slideshowField;
+        }
+        set {
+            this.slideshowField = value;
         }
     }
     

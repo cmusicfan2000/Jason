@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Syncfusion.Presentation;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Jason.ViewModels.WorshipServices
 {
@@ -33,6 +36,29 @@ namespace Jason.ViewModels.WorshipServices
                 throw new ArgumentNullException(nameof(model));
 
             this.model = model;
+        }
+        #endregion
+
+        #region Methods
+        public IEnumerable<ISlide> GetSlides(IPresentation presentation)
+        {
+            if (presentation == null)
+                throw new ArgumentNullException(nameof(presentation));
+
+            Collection<ISlide> slides = new Collection<ISlide>();
+
+            foreach (string slideNumberString in model.Slides.Split(' '))
+            {
+                if (int.TryParse(slideNumberString, out int slideNumber))
+                {
+                    ISlide slideAtIndex = presentation.Slides[slideNumber];
+
+                    if (slideAtIndex != null)
+                        slides.Add(slideAtIndex);
+                }
+            }
+
+            return slides;
         }
         #endregion
     }

@@ -5,7 +5,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Windows.Storage;
-using Windows.Storage.Pickers;
 using Windows.UI.Xaml.Input;
 
 namespace Jason.ViewModels

@@ -8,6 +8,7 @@ using Windows.System;
 using Windows.UI.Xaml.Input;
 using Syncfusion.Presentation;
 using Jason.Models;
+using System.Linq;
 
 namespace Jason.ViewModels.WorshipServices
 {
@@ -106,7 +107,12 @@ namespace Jason.ViewModels.WorshipServices
                 else if (item is Sermon srItem)
                     parts.Add(new SermonViewModel(srItem));
                 else if (item is Song songItem)
-                    parts.Add(new SongViewModel(songItem));
+                {
+                    if (model.Songs.TryGetValue(songItem.Slideshow, out IPresentation songPresentation))
+                        parts.Add(new SongViewModel(songItem, songPresentation));
+                    else
+                        parts.Add(new SongViewModel(songItem));
+                }
                 else if (item is FamilyNewsAndPrayer)
                     parts.Add(new FamilyNewsAndPrayerViewModel());
                 else if (item is Placeholder ph)

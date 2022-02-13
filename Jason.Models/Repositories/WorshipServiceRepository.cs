@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Syncfusion.Presentation;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Compression;
@@ -15,7 +17,6 @@ namespace Jason.Models.Repositories
 {
     public class WorshipServiceRepository
     {
-
         public void Save(WorshipService service)
         {
 
@@ -35,48 +36,55 @@ namespace Jason.Models.Repositories
             if (file == null)
                 return null;
 
-            // .jws files are zip files which contain an xml file representing the order of worship and
-            // a collection of zero or more images related to the order and referenced by it. We need
-            // to open the file as a zip archive and extract each piece
+            // .jws file structure:
+            // order.xml - The order of worship
+            // Images    - A directory containing images referenced by the order of worship
+            // Songs     - A directory containing slideshows with songs pertaining to the service
 
             // Load the contents of the jws
             var stream = await file.OpenSequentialReadAsync();
-            WorshipServiceOrder order = null;
-            Collection<WorshipServiceImage> images = new Collection<WorshipServiceImage>();
+            WorshipService service = new WorshipService();
 
             using (ZipArchive jws = new ZipArchive(stream.AsStreamForRead(), ZipArchiveMode.Read))
             {
-                foreach (ZipArchiveEntry entry in jws.Entries)
+                // Load the order
+                service.Order = await LoadOrder(jws.GetEntry("order.xml"));
+
+                // Load images
+                IEnumerable<ZipArchiveEntry> imageEntries = jws.Entries.Where(e => e.FullName.StartsWith("Images/") &&
+                                                                                   e.Name.EndsWith(".jpg"));
+                foreach (ZipArchiveEntry entry in imageEntries)
                 {
-                    if (entry.Name.EndsWith(".xml"))
+                    using (Stream s = entry.Open())
                     {
-                        var result = await LoadOrder(entry);
-
-                        if (result != null &&
-                            order != null)
-                            throw new InvalidOperationException("Unable to load service. Multiple orders found in file.");
-
-                        order = result;
+                        service.Images.Add(new WorshipServiceImage(entry.Name, s));
                     }
+                }
 
-                    else if (entry.Name.EndsWith(".jpg"))
+                // Load song slides
+                IEnumerable<ZipArchiveEntry> songEntries = jws.Entries.Where(e => e.FullName.StartsWith("Songs/") &&
+                                                                                  e.Name.EndsWith(".pptx"));
+                foreach (ZipArchiveEntry entry in songEntries)
+                {
+                    using (Stream s = entry.Open())
                     {
-                        using (Stream s = entry.Open())
+                        using (MemoryStream ms = new MemoryStream())
                         {
-                            images.Add(new WorshipServiceImage(entry.Name, s));
+                            s.CopyTo(ms);
+                            service.Songs.Add(entry.Name, Presentation.Open(ms));
                         }
                     }
                 }
             }
 
-            if (order == null)
-                throw new InvalidOperationException("Unable to load service. No order found in file.");
-
-            return new WorshipService(order, images);
+            return service;
         }
 
         private async Task<WorshipServiceOrder> LoadOrder(ZipArchiveEntry entry)
         {
+            if (entry == null)
+                throw new InvalidOperationException("Unable to load service. No order found in file.");
+
             using (Stream s = entry.Open())
             {
                 // Attempt to load as XML
@@ -94,18 +102,39 @@ namespace Jason.Models.Repositories
                     schemas.Add("", XmlReader.Create(xsdReader));
 
                     Collection<string> errors = new Collection<string>();
-                    doc.Validate(schemas, (o, e) =>
+                    try
                     {
-                        errors.Add(e.Message);
-                    });
+                        doc.Validate(schemas, (o, e) =>
+                        {
+                            errors.Add(e.Message);
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new InvalidOperationException("Unable to load service. The parser threw an error", ex);
+                    }
 
                     if (errors.Any())
-                        return null;
+                        throw new InvalidOperationException("Unable to load service. The order contained errors.");
                 }
 
                 // De-serialize the xml into models
                 var serializer = new XmlSerializer(typeof(WorshipServiceOrder));
-                return serializer.Deserialize(doc.CreateReader()) as WorshipServiceOrder;
+
+                WorshipServiceOrder wso;
+                try
+                {
+
+                    wso = serializer.Deserialize(doc.CreateReader()) as WorshipServiceOrder;
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+
+
+                return wso;
             }
         }
     }

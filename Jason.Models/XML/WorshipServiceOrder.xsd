@@ -2,6 +2,10 @@
 <xs:schema attributeFormDefault="unqualified"
            elementFormDefault="qualified"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="listOfPositiveIntegers">
+    <xs:list itemType="xs:positiveInteger"/>
+  </xs:simpleType>
+
   <xs:complexType name="ImageBackground">
     <xs:attribute name="BackgroundImageName"
                   type="xs:string"
@@ -112,8 +116,14 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-
+  
   <xs:complexType name="SongPart">
+    <xs:sequence>
+      <xs:element name="Slides"
+                  type="listOfPositiveIntegers"
+                  maxOccurs="1"
+                  minOccurs="0"/>
+    </xs:sequence>
       <xs:attribute name="Name"
                     type="xs:string"
                     use="required" />
@@ -128,6 +138,9 @@
     <xs:attribute name="Title"
                   type="xs:string"
                   use="required" />
+    <xs:attribute name="Slideshow"
+                  type="xs:string"
+                  use="optional"/>
     <xs:attribute name="BookNumber"
                   use="optional" >
       <xs:simpleType>

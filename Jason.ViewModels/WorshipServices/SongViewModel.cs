@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Syncfusion.Presentation;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Jason.ViewModels.WorshipServices
 {
@@ -8,6 +10,7 @@ namespace Jason.ViewModels.WorshipServices
     {
         #region Fields
         private readonly Song model;
+        private readonly IPresentation songPresentation;
         #endregion
 
         #region Properties
@@ -47,6 +50,28 @@ namespace Jason.ViewModels.WorshipServices
             }
         }
 
+        /// <summary>
+        /// A display-friendly name for this instance
+        /// </summary>
+        public override string DisplayName => BookNumber == null ? $"Song: {Title}"
+                                                                 : $"Song: {Title} (#{BookNumber})";
+
+        /// <summary>
+        /// Gets the name of the slideshow containing slides for the song
+        /// </summary>
+        public string Slideshow
+        {
+            get => model.Slideshow;
+            private set
+            {
+                if (model.Slideshow != value)
+                {
+                    model.Slideshow = value;
+                    InvokePropertyChanged();
+                }
+            }
+        }
+
         private readonly ObservableCollection<SongPartViewModel> parts;
         private ReadOnlyObservableCollection<SongPartViewModel> roParts;
         /// <summary>
@@ -62,20 +87,34 @@ namespace Jason.ViewModels.WorshipServices
                 return roParts;
             }
         }
-
-
-        public override string DisplayName => BookNumber == null ? $"Song: {Title}"
-                                                                 : $"Song: {Title} (#{BookNumber})";
         #endregion
 
         #region Constructor
         public SongViewModel(Song model)
+            : this(model, null) { }
+
+        public SongViewModel(Song model, IPresentation songPresentation)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
 
             this.model = model;
+            this.songPresentation = songPresentation;
             parts = new ObservableCollection<SongPartViewModel>(model.Part.Select(p => new SongPartViewModel(p)));
+        }
+        #endregion
+
+        #region Methods
+        protected override async Task AddToSection(ISection section)
+        {
+            if (songPresentation == null)
+                throw new InvalidOperationException("Unable to add the song to the section. No presentation is associated with the song.");
+
+            foreach (SongPartViewModel part in Parts)
+            {
+                foreach (ISlide slide in part.GetSlides(songPresentation))
+                    section.Slides.Add(slide);
+            }
         }
         #endregion
     }
