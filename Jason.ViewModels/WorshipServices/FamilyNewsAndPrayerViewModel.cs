@@ -9,7 +9,7 @@ namespace Jason.ViewModels.WorshipServices
     {
         public override string DisplayName => "Family News and Prayer";
 
-        protected override async Task AddToSection(ISection section)
+        protected override async Task AddToSection(ISection section, IColor theme, string commingNext)
         {
             // Add a blank slide to the section
             ISlide slide = section.Slides.Add(SlideLayoutType.Blank);

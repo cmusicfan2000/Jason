@@ -6,6 +6,16 @@
     <xs:list itemType="xs:positiveInteger"/>
   </xs:simpleType>
 
+  <xs:simpleType name="color">
+    <xs:union memberTypes="xs:NMTOKEN">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:pattern value="#[0-9a-fA-F]{6}"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
   <xs:complexType name="ImageBackground">
     <xs:attribute name="BackgroundImageName"
                   type="xs:string"
@@ -196,6 +206,9 @@
       </xs:sequence>
       <xs:attribute name="Date"
                     type="xs:date"
+                    use="required" />
+      <xs:attribute name="ThemeColor"
+                    type="color"
                     use="required" />
       <xs:attribute name="Focus"
                     type="xs:string"

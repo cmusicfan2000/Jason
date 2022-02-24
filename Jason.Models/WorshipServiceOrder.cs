@@ -28,6 +28,8 @@ public partial class WorshipServiceOrder {
     
     private System.DateTime dateField;
     
+    private string themeColorField;
+    
     private string focusField;
     
     /// <remarks/>
@@ -54,6 +56,17 @@ public partial class WorshipServiceOrder {
         }
         set {
             this.dateField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string ThemeColor {
+        get {
+            return this.themeColorField;
+        }
+        set {
+            this.themeColorField = value;
         }
     }
     

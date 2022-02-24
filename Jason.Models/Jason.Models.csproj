@@ -141,9 +141,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="XML\ServiceExample.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="GenerateModels.bat" />
     <EmbeddedResource Include="XML\WorshipServiceOrder.xsd">
       <SubType>Designer</SubType>

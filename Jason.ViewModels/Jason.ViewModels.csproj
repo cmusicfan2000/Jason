@@ -153,7 +153,9 @@
       <Name>Jason.Models</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\BRLogo.png" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\FamilyNewsandPrayer.jpg" />
   </ItemGroup>

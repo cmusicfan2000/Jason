@@ -11,18 +11,23 @@ namespace Jason.ViewModels.WorshipServices
         /// Gets a display-friendly name for the part
         /// </summary>
         public abstract string DisplayName { get; }
+
+        /// <summary>
+        /// Gets the text to display on the previous slide if this part is coming next
+        /// </summary>
+        public virtual string CommingNextText => DisplayName;
         #endregion
 
         #region Methods
         /// <summary>
         /// Adds this worship service part to an OpenXML powerpoint presentation
         /// </summary>
-        protected virtual Task AddToSection(ISection section) => Task.CompletedTask;
+        protected virtual Task AddToSection(ISection section, IColor theme, string commingNext) => Task.CompletedTask;
 
         /// <summary>
         /// Adds this worship service part to an OpenXML powerpoint presentation
         /// </summary>
-        public async Task AddToPresentation(IPresentation presentation)
+        public async Task AddToPresentation(IPresentation presentation, IColor theme, string commingNext)
         {
             if (presentation == null)
                 throw new ArgumentNullException(nameof(presentation));
@@ -34,7 +39,7 @@ namespace Jason.ViewModels.WorshipServices
             // Add the appropraite slides to it
             try
             {
-                await AddToSection(partSection);
+                await AddToSection(partSection, theme, commingNext);
             }
             catch
             {

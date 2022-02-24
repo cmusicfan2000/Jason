@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Jason.Models;
+using Microsoft.Toolkit.Uwp.Helpers;
+using Syncfusion.Presentation;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.System;
+using Windows.UI;
 using Windows.UI.Xaml.Input;
-using Syncfusion.Presentation;
-using Jason.Models;
-using System.Linq;
 
 namespace Jason.ViewModels.WorshipServices
 {
@@ -49,6 +50,31 @@ namespace Jason.ViewModels.WorshipServices
                     InvokePropertyChanged();
                 }
             }
+        }
+
+        private Color themeColor;
+        /// <summary>
+        /// Gets or sets
+        /// </summary>
+        public Color ThemeColor
+        {
+            get
+            {
+                if (themeColor == default(Color))
+                    themeColor = model.Order.ThemeColor.ToColor();
+
+                return themeColor;
+            }
+            //set
+            //{
+            //    if (themeColor != value)
+            //    {
+            //        // TODO: Make sure this spits out the right format
+            //        model.Order.ThemeColor = value.ToHex();
+
+            //        InvokePropertyChanged();
+            //    }
+            //}
         }
 
         private readonly ObservableCollection<WorshipServicePartViewModel> parts;
@@ -130,9 +156,17 @@ namespace Jason.ViewModels.WorshipServices
             // Create a new presentation
             IPresentation presentation = Presentation.Create();
 
+            IColor theme = ColorObject.FromArgb(ThemeColor.R, ThemeColor.G, ThemeColor.B);
+
             // Add each part
-            foreach (WorshipServicePartViewModel part in Parts)
-                await part.AddToPresentation(presentation);
+            int lastPartIndex = Parts.Count - 1;
+            for (int i = 0; i < Parts.Count; i++)
+            {
+                await Parts[i].AddToPresentation(presentation,
+                                                 theme,
+                                                 i == lastPartIndex ? null
+                                                                    : Parts[i + 1].CommingNextText);
+            }
 
             // Save and close the presentation
             using (Stream s = (await target.OpenAsync(FileAccessMode.ReadWrite)).AsStream())

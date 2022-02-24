@@ -61,6 +61,11 @@ namespace Jason.ViewModels.WorshipServices
         }
 
         public override string DisplayName => $"Scripture: {Book} {Reference} ({Translation})";
+
+        /// <summary>
+        /// Gets the text to show on the previous slide when this scripture is coming up next
+        /// </summary>
+        public override string CommingNextText => "Reading from God's Word";
         #endregion
 
         #region Constructor
