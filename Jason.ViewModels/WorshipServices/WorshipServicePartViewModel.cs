@@ -22,12 +22,12 @@ namespace Jason.ViewModels.WorshipServices
         /// <summary>
         /// Adds this worship service part to an OpenXML powerpoint presentation
         /// </summary>
-        protected virtual Task AddToSection(ISection section, IColor theme, string commingNext) => Task.CompletedTask;
+        protected virtual void AddToSection(ISection section, IColor theme, string commingNext) { }
 
         /// <summary>
         /// Adds this worship service part to an OpenXML powerpoint presentation
         /// </summary>
-        public async Task AddToPresentation(IPresentation presentation, IColor theme, string commingNext)
+        public void AddToPresentation(IPresentation presentation, IColor theme, string commingNext)
         {
             if (presentation == null)
                 throw new ArgumentNullException(nameof(presentation));
@@ -39,9 +39,9 @@ namespace Jason.ViewModels.WorshipServices
             // Add the appropraite slides to it
             try
             {
-                await AddToSection(partSection, theme, commingNext);
+                AddToSection(partSection, theme, commingNext);
             }
-            catch
+            catch(Exception e)
             {
                 // Clear any slides from the section
                 partSection.Slides.Clear();

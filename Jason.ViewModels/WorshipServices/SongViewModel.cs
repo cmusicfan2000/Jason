@@ -1,10 +1,9 @@
-﻿using Syncfusion.Presentation;
+﻿using Jason.ViewModels.Extensions;
+using Syncfusion.Presentation;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Jason.ViewModels.WorshipServices
 {
@@ -113,7 +112,7 @@ namespace Jason.ViewModels.WorshipServices
         #endregion
 
         #region Methods
-        protected override async Task AddToSection(ISection section, IColor theme, string commingNext)
+        protected override void AddToSection(ISection section, IColor theme, string commingNext)
         {
             if (songPresentation == null)
                 throw new InvalidOperationException("Unable to add the song to the section. No presentation is associated with the song.");
@@ -175,27 +174,13 @@ namespace Jason.ViewModels.WorshipServices
             tb.TextBody.Text = text;
             tb.TextBody.MarginLeft = marginLeft;
 
-            tb.TextBody.Paragraphs[0].Font.Color = (PerceivedBrightness(theme) > 130 ? ColorObject.Black : ColorObject.White);
+            tb.TextBody.Paragraphs[0].Font.Color = theme.BackgroundToForeground();
             tb.TextBody.Paragraphs[0].Font.FontName = "Ebrima";
             tb.TextBody.Paragraphs[0].Font.FontSize = 26;
             tb.TextBody.MarginTop = 0;
             tb.TextBody.MarginBottom = 0;
             tb.Fill.FillType = FillType.Solid;
             tb.Fill.SolidFill.Color = theme;
-        }
-
-        /// <summary>
-        /// Calculates the percieved brightness of the color
-        /// </summary>
-        /// <param name="c">
-        /// The color for which to calculate
-        /// </param>
-        private int PerceivedBrightness(IColor c)
-        {
-            return (int)Math.Sqrt(
-            c.R * c.R * .241 +
-            c.G * c.G * .691 +
-            c.B * c.B * .068);
         }
         #endregion
     }

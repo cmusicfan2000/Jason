@@ -1,7 +1,5 @@
-﻿using Syncfusion.Drawing;
+﻿using Jason.ViewModels.Extensions;
 using Syncfusion.Presentation;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Jason.ViewModels.WorshipServices
 {
@@ -9,18 +7,11 @@ namespace Jason.ViewModels.WorshipServices
     {
         public override string DisplayName => "Family News and Prayer";
 
-        protected override async Task AddToSection(ISection section, IColor theme, string commingNext)
+        protected override void AddToSection(ISection section, IColor theme, string commingNext)
         {
             // Add a blank slide to the section
             ISlide slide = section.Slides.Add(SlideLayoutType.Blank);
-
-            using (Stream imageStream = this.GetType()
-                                            .Assembly
-                                            .GetManifestResourceStream("Jason.ViewModels.Resources.FamilyNewsandPrayer.jpg"))
-            {
-                slide.Background.Fill.FillType = FillType.Picture;
-                slide.Background.Fill.PictureFill.ImageBytes = Image.FromStream(imageStream).ImageData;
-            }
+            slide.SetBackgroundFromResource("FamilyNewsandPrayer.jpg");
         }
     }
 }

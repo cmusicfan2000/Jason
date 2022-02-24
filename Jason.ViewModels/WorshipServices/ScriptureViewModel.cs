@@ -60,7 +60,23 @@ namespace Jason.ViewModels.WorshipServices
             }
         }
 
-        public override string DisplayName => $"Scripture: {Book} {Reference} ({Translation})";
+        /// <summary>
+        /// Gets or sets the full text of the passage
+        /// </summary>
+        public string FullText
+        {
+            get => model.Text;
+            set
+            {
+                if (model.Text != value)
+                {
+                    model.Text = value;
+                    InvokePropertyChanged();
+                }
+            }
+        }
+
+        public override string DisplayName => $"{Book} {Reference} ({Translation})";
 
         /// <summary>
         /// Gets the text to show on the previous slide when this scripture is coming up next

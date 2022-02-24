@@ -157,6 +157,8 @@ public partial class Scripture : ImageBackground {
     
     private ScriptureTranslation translationField;
     
+    private string textField;
+    
     /// <remarks/>
     [System.Xml.Serialization.XmlAttributeAttribute()]
     public ScriptureBook Book {
@@ -187,6 +189,17 @@ public partial class Scripture : ImageBackground {
         }
         set {
             this.translationField = value;
+        }
+    }
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlAttributeAttribute()]
+    public string Text {
+        get {
+            return this.textField;
+        }
+        set {
+            this.textField = value;
         }
     }
 }

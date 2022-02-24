@@ -120,6 +120,8 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Extensions\IColorExtensions.cs" />
+    <Compile Include="Extensions\ISlideExtensions.cs" />
     <Compile Include="MainViewModel.cs" />
     <Compile Include="RecentServiceViewModel.cs" />
     <Compile Include="WorshipServices\LordsSupperViewModel.cs" />
@@ -158,6 +160,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\FamilyNewsandPrayer.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\LordsSupperScripture.JPG" />
+    <EmbeddedResource Include="Resources\LordsSupperThoughts.JPG" />
+    <EmbeddedResource Include="Resources\LordsSupperTitle.JPG" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

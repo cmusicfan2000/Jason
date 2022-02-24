@@ -35,7 +35,7 @@ namespace Jason.ViewModels.WorshipServices
         #endregion
 
         #region Methods
-        protected override async Task AddToSection(ISection section, IColor theme, string commingNext)
+        protected override void AddToSection(ISection section, IColor theme, string commingNext)
         {
             // Add a blank slide to the section
             ISlide slide = section.Slides.Add(SlideLayoutType.Blank);

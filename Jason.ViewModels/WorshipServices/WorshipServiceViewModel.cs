@@ -4,6 +4,7 @@ using Syncfusion.Presentation;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -162,10 +163,13 @@ namespace Jason.ViewModels.WorshipServices
             int lastPartIndex = Parts.Count - 1;
             for (int i = 0; i < Parts.Count; i++)
             {
-                await Parts[i].AddToPresentation(presentation,
-                                                 theme,
-                                                 i == lastPartIndex ? null
-                                                                    : Parts[i + 1].CommingNextText);
+                await Task.Run(() =>
+                {
+                    Parts[i].AddToPresentation(presentation,
+                                               theme,
+                                               i == lastPartIndex ? null
+                                                                  : Parts[i + 1].CommingNextText);
+                });
             }
 
             // Save and close the presentation
