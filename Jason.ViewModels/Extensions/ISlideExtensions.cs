@@ -18,9 +18,12 @@ namespace Jason.ViewModels.Extensions
         {
             using (Stream imageStream = typeof(ISlideExtensions).Assembly
                                                                 .GetManifestResourceStream($"Jason.ViewModels.Resources.{resourceName}"))
+            using (MemoryStream ms = new MemoryStream())
             {
+                imageStream.CopyTo(ms);
+
                 slide.Background.Fill.FillType = FillType.Picture;
-                slide.Background.Fill.PictureFill.ImageBytes = Image.FromStream(imageStream).ImageData;
+                slide.Background.Fill.PictureFill.ImageBytes = ms.ToArray();
             }
         }
     }

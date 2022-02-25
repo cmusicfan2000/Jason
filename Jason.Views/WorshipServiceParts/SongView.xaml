@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:msConverters="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -17,35 +18,53 @@
                 <Visibility>Visible</Visibility>
             </msConverters:EmptyObjectToObjectConverter.NotEmptyValue>
         </msConverters:EmptyObjectToObjectConverter>
+        <muxc:StackLayout x:Name="HorizontalStackLayout"
+                          Orientation="Horizontal"
+                          Spacing="8"/>
     </UserControl.Resources>
 
-    <StackPanel>
-        <!-- Title -->
-        <StackPanel Orientation="Horizontal">
-            <TextBlock>
-                <TextBlock.Inlines>
-                    <Run Text="Song:"/>
-                    <Run Text="{Binding Title, Mode=OneWay}"/>
-                </TextBlock.Inlines>
-            </TextBlock>
-
-            <StackPanel Orientation="Horizontal"
-                    Margin="5,0,0,0"
-                    Visibility="{Binding BookNumber, Converter={StaticResource NullToVisibilityCollapsedConverter}}">
-                <TextBlock Text="(#"/>
-                <TextBlock Text="{Binding BookNumber, Mode=OneWay}"/>
-                <TextBlock Text=")"/>
-            </StackPanel>
-        </StackPanel>
-        
-        <!-- Parts -->
-        <ItemsControl ItemsSource="{Binding Parts}"
-                      Margin="15,0,0,0">
-            <ItemsControl.ItemTemplate>
+    <Border Background="{ThemeResource AcrylicInAppFillColorDefaultBrush}"
+            CornerRadius="4">
+        <muxc:Expander>
+            <muxc:Expander.HeaderTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <SymbolIcon Symbol="MusicInfo"/>
+                        <TextBlock Margin="5,0,0,0"
+                                   Text="{Binding DisplayName, Mode=OneWay}"/>
+                    </StackPanel>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </StackPanel>
+            </muxc:Expander.HeaderTemplate>
+
+             <!--Parts-->
+            <Grid Margin="15,0,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <!-- Parts-->
+                <ItemsControl ItemsSource="{Binding Parts}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                
+                <!-- Slides -->
+                <muxc:ItemsRepeater ItemsSource="{Binding Slides}"
+                                    Layout="{StaticResource HorizontalStackLayout}"
+                                    Margin="8,0">
+                    <muxc:ItemsRepeater.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding}"
+                                   Height="150"
+                                   Width="200"/>
+                        </DataTemplate>
+                    </muxc:ItemsRepeater.ItemTemplate>
+                </muxc:ItemsRepeater>
+            </Grid>
+        </muxc:Expander>
+    </Border>
 </UserControl>

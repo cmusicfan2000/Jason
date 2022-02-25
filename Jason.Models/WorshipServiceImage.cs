@@ -38,6 +38,6 @@ namespace Jason.Models
         /// <returns>
         /// The image data as a <see cref="Stream"/>
         /// </returns>
-        public Stream AsStream() => new MemoryStream(data);
+        public MemoryStream AsStream() => new MemoryStream(data);
     }
 }

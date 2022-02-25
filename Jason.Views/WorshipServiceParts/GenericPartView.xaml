@@ -7,5 +7,16 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
-    <TextBlock Text="{Binding DisplayName}"/>
+
+    <Border Background="{ThemeResource AcrylicInAppFillColorDefaultBrush}"
+            CornerRadius="4">
+        <StackPanel Orientation="Horizontal">
+            <SymbolIcon Symbol="Document"/>
+            <TextBlock Text="{Binding DisplayName}"
+                   VerticalAlignment="Center"
+                   Foreground="White"
+                   Margin="5"
+                   Style="{StaticResource TitleTextBlockStyle}"/>
+        </StackPanel>
+    </Border>
 </UserControl>

@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:conv="using:Microsoft.Toolkit.Uwp.UI.Converters"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -25,26 +26,26 @@
         </views:WorshipServicePartTemplateSelector>
 
         <conv:StringFormatConverter x:Key="StringFormatConverter"/>
+        <muxc:StackLayout x:Name="VerticalStackLayout"
+                          Orientation="Vertical"
+                          Spacing="8"/>
     </Page.Resources>
     
     <Grid DataContext="{Binding WorshipService}">
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition />
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{Binding Date, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:MM/dd/yyyy}'}"
-                   Style="{StaticResource HeaderTextBlockStyle}"/>
-
-        <ScrollViewer Grid.Row="1"
-                      Margin="0,10,0,0">
-            <ItemsControl ItemsSource="{Binding Parts}"
-                          ItemTemplateSelector="{StaticResource PartTemplateSelector}"/>
+        <ScrollViewer Margin="0,10,0,0">
+            <muxc:ItemsRepeater ItemsSource="{Binding Parts}"
+                            ItemTemplate="{StaticResource PartTemplateSelector}"
+                            Layout="{StaticResource VerticalStackLayout}"
+                            Margin="8,0"/>
         </ScrollViewer>
 
-        <CommandBar Grid.Row="2">
+        <CommandBar Grid.Row="1">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Command="{Binding GeneratePowerpointCommand}"
                               Content="Generate Powerpoint"

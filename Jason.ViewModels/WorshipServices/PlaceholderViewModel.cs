@@ -50,10 +50,10 @@ namespace Jason.ViewModels.WorshipServices
 
                 if (wsi != null)
                 {
-                    using (Stream imageStream = wsi.AsStream())
+                    using (MemoryStream imageStream = wsi.AsStream())
                     {
                         slide.Background.Fill.FillType = FillType.Picture;
-                        slide.Background.Fill.PictureFill.ImageBytes = Image.FromStream(imageStream).ImageData;
+                        slide.Background.Fill.PictureFill.ImageBytes = imageStream.ToArray();
                     }
                 }
             }

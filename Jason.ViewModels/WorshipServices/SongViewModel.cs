@@ -1,9 +1,12 @@
 ﻿using Jason.ViewModels.Extensions;
 using Syncfusion.Presentation;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Jason.ViewModels.WorshipServices
 {
@@ -76,6 +79,45 @@ namespace Jason.ViewModels.WorshipServices
                     model.Slideshow = value;
                     InvokePropertyChanged();
                 }
+            }
+        }
+
+        public IEnumerable<BitmapImage> slides;
+        /// <summary>
+        /// Gets the slides as images
+        /// </summary>
+        public IEnumerable<BitmapImage> Slides
+        {
+            get
+            {
+                if (slides == null)
+                {
+                    //Initialize the ‘ChartToImageConverter’ instance to convert the charts in the slides
+                    //songPresentation.ChartToImageConverter = new ChartToImageConverter();
+
+                    ////Pick the folder to save the converted images.
+                    //FolderPicker folderPicker = new FolderPicker();
+                    //folderPicker.ViewMode = PickerViewMode.Thumbnail;
+                    //folderPicker.FileTypeFilter.Add("*");
+                    //StorageFolder storageFolder = await folderPicker.PickSingleFolderAsync();
+                    //StorageFile imageFile = await storageFolder.CreateFileAsync("Slide1.jpg", CreationCollisionOption.ReplaceExisting);
+
+                    ////Convert the slide to image.
+                    //await slide.SaveAsImageAsync(imageFile);
+
+
+                    //Load the PowerPoint Presentation
+                    //Collection<BitmapImage> slideImages = new Collection<BitmapImage>();
+                    //foreach (Stream s in songPresentation.RenderAsImages(ExportImageFormat.Jpeg))
+                    //{
+
+                    //    BitmapImage bitMap = new BitmapImage();
+                    //    bitMap.SetSource(s as IRandomAccessStream);
+                    //    slideImages.Add(bitMap);
+                    //}
+                }
+
+                return slides;
             }
         }
 
