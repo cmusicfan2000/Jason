@@ -1,6 +1,8 @@
 ﻿using Syncfusion.Drawing;
 using Syncfusion.Presentation;
 using System.IO;
+using Windows.Storage.Streams;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Jason.ViewModels.Extensions
 {

@@ -1,10 +1,14 @@
 ﻿using Jason.ViewModels.Extensions;
+using Syncfusion.OfficeChartToImageConverter;
 using Syncfusion.Presentation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
@@ -82,44 +86,78 @@ namespace Jason.ViewModels.WorshipServices
             }
         }
 
-        public IEnumerable<BitmapImage> slides;
+        public IEnumerable<byte[]> slides;
         /// <summary>
         /// Gets the slides as images
         /// </summary>
-        public IEnumerable<BitmapImage> Slides
+        public IEnumerable<byte[]> Slides
         {
             get
             {
-                if (slides == null)
-                {
-                    //Initialize the ‘ChartToImageConverter’ instance to convert the charts in the slides
-                    //songPresentation.ChartToImageConverter = new ChartToImageConverter();
-
-                    ////Pick the folder to save the converted images.
-                    //FolderPicker folderPicker = new FolderPicker();
-                    //folderPicker.ViewMode = PickerViewMode.Thumbnail;
-                    //folderPicker.FileTypeFilter.Add("*");
-                    //StorageFolder storageFolder = await folderPicker.PickSingleFolderAsync();
-                    //StorageFile imageFile = await storageFolder.CreateFileAsync("Slide1.jpg", CreationCollisionOption.ReplaceExisting);
-
-                    ////Convert the slide to image.
-                    //await slide.SaveAsImageAsync(imageFile);
-
-
-                    //Load the PowerPoint Presentation
-                    //Collection<BitmapImage> slideImages = new Collection<BitmapImage>();
-                    //foreach (Stream s in songPresentation.RenderAsImages(ExportImageFormat.Jpeg))
-                    //{
-
-                    //    BitmapImage bitMap = new BitmapImage();
-                    //    bitMap.SetSource(s as IRandomAccessStream);
-                    //    slideImages.Add(bitMap);
-                    //}
-                }
+                //if (slides == null)
+                //{
+                //    var task = getSlidesAsBytes();
+                //    task.Wait();
+                //    slides = task.Result;
+                //}
 
                 return slides;
             }
         }
+
+        //private async Task<IEnumerable<byte[]>> getSlidesAsBytes()
+        //{
+        //    //Initialize the ‘ChartToImageConverter’ instance to convert the charts in the slides
+        //    //songPresentation.ChartToImageConverter = new ChartToImageConverter();
+        //    Collection<byte[]> slideImages = new Collection<byte[]>();
+        //    foreach (ISlide slide in songPresentation.Slides)
+        //    {
+        //        using (MemoryStream ms = new MemoryStream())
+        //        {
+
+        //        }
+
+        //        slide.SaveAsImageAsync()
+
+
+        //        //Convert the slide to an image.
+        //        await slide.SaveAsImageAsync(tempFile);
+
+        //        using (Stream stream = await tempFile.OpenStreamForReadAsync())
+        //        {
+        //            using (var memoryStream = new MemoryStream())
+        //            {
+        //                stream.CopyTo(memoryStream);
+        //                slideImages.Add(memoryStream.ToArray());
+        //            }
+        //        }
+
+        //        //using (var imageStream = await tempFile.OpenStreamForWriteAsync())
+        //        //{
+        //        //    await slide.SaveAsImageAsync(imageStream);
+        //        //}
+
+
+        //        using (MemoryStream ms = new MemoryStream())
+        //        {
+        //            try
+        //            {
+        //                slide.SaveAsImageAsync(ms).Wait();
+        //            }
+        //            catch (Exception ex)
+        //            {
+
+        //                throw;
+        //            }
+
+
+        //            byte[] stuff = ms.ToArray();
+        //            slideImages.Add(stuff);
+        //        }
+        //    }
+
+        //    return slideImages;
+        //}
 
         private readonly ObservableCollection<SongPartViewModel> parts;
         private ReadOnlyObservableCollection<SongPartViewModel> roParts;

@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:msConverters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:conv="using:Jason.Views.Converters"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -21,6 +22,7 @@
         <muxc:StackLayout x:Name="HorizontalStackLayout"
                           Orientation="Horizontal"
                           Spacing="8"/>
+        <conv:BytesToImageConverter x:Key="ImageConverter"/>
     </UserControl.Resources>
 
     <Border Background="{ThemeResource AcrylicInAppFillColorDefaultBrush}"
@@ -58,7 +60,7 @@
                                     Margin="8,0">
                     <muxc:ItemsRepeater.ItemTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding}"
+                            <Image Source="{Binding Converter={StaticResource ImageConverter}}"
                                    Height="150"
                                    Width="200"/>
                         </DataTemplate>
