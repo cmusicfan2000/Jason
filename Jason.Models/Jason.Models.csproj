@@ -120,6 +120,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Extensions\IPresentationExtensions.cs" />
     <Compile Include="Repositories\RecentFilesRepository.cs" />
     <Compile Include="Repositories\SettingsRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

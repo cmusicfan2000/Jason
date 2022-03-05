@@ -94,70 +94,16 @@ namespace Jason.ViewModels.WorshipServices
         {
             get
             {
-                //if (slides == null)
-                //{
-                //    var task = getSlidesAsBytes();
-                //    task.Wait();
-                //    slides = task.Result;
-                //}
+                if (slides == null)
+                {
+                    var task = getSlidesAsBytes();
+                    task.Wait();
+                    slides = task.Result;
+                }
 
                 return slides;
             }
         }
-
-        //private async Task<IEnumerable<byte[]>> getSlidesAsBytes()
-        //{
-        //    //Initialize the ‘ChartToImageConverter’ instance to convert the charts in the slides
-        //    //songPresentation.ChartToImageConverter = new ChartToImageConverter();
-        //    Collection<byte[]> slideImages = new Collection<byte[]>();
-        //    foreach (ISlide slide in songPresentation.Slides)
-        //    {
-        //        using (MemoryStream ms = new MemoryStream())
-        //        {
-
-        //        }
-
-        //        slide.SaveAsImageAsync()
-
-
-        //        //Convert the slide to an image.
-        //        await slide.SaveAsImageAsync(tempFile);
-
-        //        using (Stream stream = await tempFile.OpenStreamForReadAsync())
-        //        {
-        //            using (var memoryStream = new MemoryStream())
-        //            {
-        //                stream.CopyTo(memoryStream);
-        //                slideImages.Add(memoryStream.ToArray());
-        //            }
-        //        }
-
-        //        //using (var imageStream = await tempFile.OpenStreamForWriteAsync())
-        //        //{
-        //        //    await slide.SaveAsImageAsync(imageStream);
-        //        //}
-
-
-        //        using (MemoryStream ms = new MemoryStream())
-        //        {
-        //            try
-        //            {
-        //                slide.SaveAsImageAsync(ms).Wait();
-        //            }
-        //            catch (Exception ex)
-        //            {
-
-        //                throw;
-        //            }
-
-
-        //            byte[] stuff = ms.ToArray();
-        //            slideImages.Add(stuff);
-        //        }
-        //    }
-
-        //    return slideImages;
-        //}
 
         private readonly ObservableCollection<SongPartViewModel> parts;
         private ReadOnlyObservableCollection<SongPartViewModel> roParts;
@@ -262,6 +208,89 @@ namespace Jason.ViewModels.WorshipServices
             tb.Fill.FillType = FillType.Solid;
             tb.Fill.SolidFill.Color = theme;
         }
+
+        private async Task<IEnumerable<byte[]>> getSlidesAsBytes()
+        {
+            Collection<byte[]> slideImages = new Collection<byte[]>();
+
+            foreach (ISlide slide in songPresentation.Slides)
+            {
+                //if (_cancellationToken.IsCancellationRequested)
+                //    return;
+                string filePath = await ConvertSlide(slide);
+                RowDefinition row = new RowDefinition();
+                ThumbnailGrid.RowDefinitions.Add(row);
+                if (_cancellationToken.IsCancellationRequested)
+                    return;
+                if (_presentation.Slides[0].SlideNumber == 0)
+                    UpdateThumbnailGrid(filePath, slide.SlideNumber + 1, _cancellationToken);
+                else
+                    UpdateThumbnailGrid(filePath, slide.SlideNumber, _cancellationToken);
+                if ((_presentation.Slides.Count >= 5 && slide.SlideNumber == 5) || _presentation.Slides.Count < 5)
+                {
+                    TempThumbNailScrollViewer.Visibility = Visibility.Collapsed;
+                    ThumbNailScrollViewer.Visibility = Visibility.Visible;
+                    MainViewImageGrid.Visibility = Visibility.Visible;
+                    loadingRing.IsActive = false;
+                    loadingRing.Visibility = Visibility.Collapsed;
+                    EnablePrinter();
+                }
+            }
+
+
+
+            //Initialize the ‘ChartToImageConverter’ instance to convert the charts in the slides
+            //songPresentation.ChartToImageConverter = new ChartToImageConverter();
+
+            foreach (ISlide slide in songPresentation.Slides)
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+
+                }
+
+                slide.SaveAsImageAsync()
+
+
+                //Convert the slide to an image.
+                await slide.SaveAsImageAsync(tempFile);
+
+                using (Stream stream = await tempFile.OpenStreamForReadAsync())
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        stream.CopyTo(memoryStream);
+                        slideImages.Add(memoryStream.ToArray());
+                    }
+                }
+
+                //using (var imageStream = await tempFile.OpenStreamForWriteAsync())
+                //{
+                //    await slide.SaveAsImageAsync(imageStream);
+                //}
+
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    try
+                    {
+                        slide.SaveAsImageAsync(ms).Wait();
+                    }
+                    catch (Exception ex)
+                    {
+
+                        throw;
+                    }
+
+
+                    byte[] stuff = ms.ToArray();
+                    slideImages.Add(stuff);
+                }
+            }
+
+            return slideImages;
+        }
+
         #endregion
     }
 }
