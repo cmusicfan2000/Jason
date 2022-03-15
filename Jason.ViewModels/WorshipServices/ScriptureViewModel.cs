@@ -23,7 +23,7 @@ namespace Jason.ViewModels.WorshipServices
                 if (model.Reference != value)
                 {
                     model.Reference = value;
-                    InvokePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -39,7 +39,7 @@ namespace Jason.ViewModels.WorshipServices
                 if (model.Book != value)
                 {
                     model.Book = value;
-                    InvokePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -55,7 +55,7 @@ namespace Jason.ViewModels.WorshipServices
                 if (model.Translation != value)
                 {
                     model.Translation = value;
-                    InvokePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -71,7 +71,7 @@ namespace Jason.ViewModels.WorshipServices
                 if (model.Text != value)
                 {
                     model.Text = value;
-                    InvokePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }

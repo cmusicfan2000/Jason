@@ -1,11 +1,15 @@
-﻿using Syncfusion.Presentation;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Jason.ViewModels.Powerpoint;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
 
 namespace Jason.ViewModels.WorshipServices
 {
-    public class SongPartViewModel : ViewModel
+    public class SongPartViewModel : ObservableObject
     {
         #region Fields
         private readonly SongPart model;
@@ -23,8 +27,46 @@ namespace Jason.ViewModels.WorshipServices
                 if (model.Name != value)
                 {
                     model.Name = value;
-                    InvokePropertyChanged();
+                    OnPropertyChanged();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets a collection of slides to include in this song part, in order
+        /// </summary>
+        public ObservableCollection<SlideViewModel> Slides { get; } = new ObservableCollection<SlideViewModel>();
+
+        private PresentationViewModel presentation;
+        /// <summary>
+        /// Gets or sets the presentation associated with this part
+        /// </summary>
+        public PresentationViewModel Presentation
+        {
+            get => presentation;
+            set
+            {
+                if(SetProperty(ref presentation, value))
+                {
+                    if (presentation != null)
+                    {
+                        IEnumerable<SlideViewModel> slides = presentation.Slides;
+
+                        if (presentation.AreSlidesLoading)
+                            presentation.PropertyChanged += OnPresentationPropertyChanged;
+                        else
+                            LoadSlides();
+                    }
+                }
+            }
+        }
+
+        private void OnPresentationPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(PresentationViewModel.AreSlidesLoading))
+            {
+                (sender as PresentationViewModel).PropertyChanged -= OnPresentationPropertyChanged;
+                LoadSlides();
             }
         }
         #endregion
@@ -36,29 +78,41 @@ namespace Jason.ViewModels.WorshipServices
                 throw new ArgumentNullException(nameof(model));
 
             this.model = model;
+            Slides.CollectionChanged += OnSlidesCollectionChanged;
         }
         #endregion
 
         #region Methods
-        public IEnumerable<ISlide> GetSlides(IPresentation presentation)
+        /// <summary>
+        /// Updates the model whenever the viewmodel's indexes change
+        /// </summary>
+        /// <param name="sender">Not used</param>
+        /// <param name="e">Not used</param>
+        private void OnSlidesCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (presentation == null)
-                throw new ArgumentNullException(nameof(presentation));
+            model.Slides = Slides.Select(s => s.Index.ToString())
+                                 .Aggregate((x, y) => $"{x} {y}");
+        }
 
-            Collection<ISlide> slides = new Collection<ISlide>();
+        private void LoadSlides()
+        {
+            Slides.CollectionChanged -= OnSlidesCollectionChanged;
 
-            foreach (string slideNumberString in model.Slides.Split(' '))
+            Slides.Clear();
+
+            if (model.Slides?.Any() == true)
             {
-                if (int.TryParse(slideNumberString, out int slideNumber))
+                foreach (SlideViewModel slide in model.Slides
+                                                      .Split(' ')
+                                                      .Where(i => int.TryParse(i, out _))
+                                                      .Select(i => Presentation.Slides.ElementAtOrDefault(int.Parse(i)))
+                                                      .Where(x => x != null))
                 {
-                    ISlide slideAtIndex = presentation.Slides[slideNumber - 1];
-
-                    if (slideAtIndex != null)
-                        slides.Add(slideAtIndex);
+                    Slides.Add(slide);
                 }
             }
 
-            return slides;
+            Slides.CollectionChanged += OnSlidesCollectionChanged;
         }
         #endregion
     }

@@ -1,15 +1,14 @@
-﻿using Jason.ViewModels.Extensions;
-using Syncfusion.OfficeChartToImageConverter;
+﻿using AsyncAwaitBestPractices.MVVM;
+using Jason.Models.Extensions;
+using Jason.ViewModels.Extensions;
+using Jason.ViewModels.Powerpoint;
 using Syncfusion.Presentation;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Storage;
-using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace Jason.ViewModels.WorshipServices
@@ -33,7 +32,7 @@ namespace Jason.ViewModels.WorshipServices
                 if (model.Title != value)
                 {
                     model.Title = value;
-                    InvokePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -53,7 +52,7 @@ namespace Jason.ViewModels.WorshipServices
                     if (value != null)
                         model.BookNumber = (ushort)value;
 
-                    InvokePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -81,28 +80,29 @@ namespace Jason.ViewModels.WorshipServices
                 if (model.Slideshow != value)
                 {
                     model.Slideshow = value;
-                    InvokePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
 
-        public IEnumerable<byte[]> slides;
+        private SongPartViewModel selectedPart;
         /// <summary>
-        /// Gets the slides as images
+        /// Gets or sets the currently selected part
         /// </summary>
-        public IEnumerable<byte[]> Slides
+        public SongPartViewModel SelectedPart
         {
-            get
-            {
-                if (slides == null)
-                {
-                    var task = getSlidesAsBytes();
-                    task.Wait();
-                    slides = task.Result;
-                }
+            get => selectedPart;
+            set => SetProperty(ref selectedPart, value);
+        }
 
-                return slides;
-            }
+        private PresentationViewModel presentation;
+        /// <summary>
+        /// Gets the presentation associated with this song
+        /// </summary>
+        public PresentationViewModel Presentation
+        {
+            get => presentation;
+            private set => SetProperty(ref presentation, value);
         }
 
         private readonly ObservableCollection<SongPartViewModel> parts;
@@ -134,6 +134,7 @@ namespace Jason.ViewModels.WorshipServices
             this.model = model;
             this.songPresentation = songPresentation;
             parts = new ObservableCollection<SongPartViewModel>(model.Part.Select(p => new SongPartViewModel(p)));
+            selectedPart = parts.FirstOrDefault();
         }
         #endregion
 
@@ -145,7 +146,7 @@ namespace Jason.ViewModels.WorshipServices
 
             foreach (SongPartViewModel part in Parts)
             {
-                foreach (ISlide slide in part.GetSlides(songPresentation))
+                foreach (ISlide slide in part.Slides.Select(s => s.Slide))
                 {
                     // Locate the current header bar and remove it if present
                     IShape header = slide.Shapes
@@ -208,89 +209,6 @@ namespace Jason.ViewModels.WorshipServices
             tb.Fill.FillType = FillType.Solid;
             tb.Fill.SolidFill.Color = theme;
         }
-
-        private async Task<IEnumerable<byte[]>> getSlidesAsBytes()
-        {
-            Collection<byte[]> slideImages = new Collection<byte[]>();
-
-            foreach (ISlide slide in songPresentation.Slides)
-            {
-                //if (_cancellationToken.IsCancellationRequested)
-                //    return;
-                string filePath = await ConvertSlide(slide);
-                RowDefinition row = new RowDefinition();
-                ThumbnailGrid.RowDefinitions.Add(row);
-                if (_cancellationToken.IsCancellationRequested)
-                    return;
-                if (_presentation.Slides[0].SlideNumber == 0)
-                    UpdateThumbnailGrid(filePath, slide.SlideNumber + 1, _cancellationToken);
-                else
-                    UpdateThumbnailGrid(filePath, slide.SlideNumber, _cancellationToken);
-                if ((_presentation.Slides.Count >= 5 && slide.SlideNumber == 5) || _presentation.Slides.Count < 5)
-                {
-                    TempThumbNailScrollViewer.Visibility = Visibility.Collapsed;
-                    ThumbNailScrollViewer.Visibility = Visibility.Visible;
-                    MainViewImageGrid.Visibility = Visibility.Visible;
-                    loadingRing.IsActive = false;
-                    loadingRing.Visibility = Visibility.Collapsed;
-                    EnablePrinter();
-                }
-            }
-
-
-
-            //Initialize the ‘ChartToImageConverter’ instance to convert the charts in the slides
-            //songPresentation.ChartToImageConverter = new ChartToImageConverter();
-
-            foreach (ISlide slide in songPresentation.Slides)
-            {
-                using (MemoryStream ms = new MemoryStream())
-                {
-
-                }
-
-                slide.SaveAsImageAsync()
-
-
-                //Convert the slide to an image.
-                await slide.SaveAsImageAsync(tempFile);
-
-                using (Stream stream = await tempFile.OpenStreamForReadAsync())
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        stream.CopyTo(memoryStream);
-                        slideImages.Add(memoryStream.ToArray());
-                    }
-                }
-
-                //using (var imageStream = await tempFile.OpenStreamForWriteAsync())
-                //{
-                //    await slide.SaveAsImageAsync(imageStream);
-                //}
-
-
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    try
-                    {
-                        slide.SaveAsImageAsync(ms).Wait();
-                    }
-                    catch (Exception ex)
-                    {
-
-                        throw;
-                    }
-
-
-                    byte[] stuff = ms.ToArray();
-                    slideImages.Add(stuff);
-                }
-            }
-
-            return slideImages;
-        }
-
         #endregion
     }
 }

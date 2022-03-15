@@ -1,4 +1,5 @@
-﻿using Jason.Models.Repositories;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Jason.Models.Repositories;
 using System;
 using System.Windows.Input;
 using Windows.Storage.Pickers;
@@ -6,7 +7,7 @@ using Windows.UI.Xaml.Input;
 
 namespace Jason.ViewModels
 {
-    public class SettingsViewModel : ViewModel
+    public class SettingsViewModel : ObservableObject
     {
         #region Fields
         private readonly SettingsRepository settingsRepo = new SettingsRepository();

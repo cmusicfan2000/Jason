@@ -123,7 +123,9 @@
     <Compile Include="Extensions\IColorExtensions.cs" />
     <Compile Include="Extensions\ISlideExtensions.cs" />
     <Compile Include="MainViewModel.cs" />
+    <Compile Include="Powerpoint\PresentationViewModel.cs" />
     <Compile Include="RecentServiceViewModel.cs" />
+    <Compile Include="Powerpoint\SlideViewModel.cs" />
     <Compile Include="WorshipServices\LordsSupperViewModel.cs" />
     <Compile Include="WorshipServices\PlaceholderViewModel.cs" />
     <Compile Include="WorshipServices\FamilyNewsAndPrayerViewModel.cs" />
@@ -135,10 +137,15 @@
     <Compile Include="WorshipServices\WorshipServiceViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingsViewModel.cs" />
-    <Compile Include="ViewModel.cs" />
     <EmbeddedResource Include="Properties\Jason.ViewModels.rd.xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AsyncAwaitBestPractices.MVVM">
+      <Version>6.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="CommunityToolkit.Mvvm">
+      <Version>7.1.2</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.13</Version>
     </PackageReference>

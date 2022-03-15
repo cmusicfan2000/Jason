@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:msConverters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    xmlns:conv="using:Jason.Views.Converters"
+    xmlns:helpers ="using:Jason.Views.Helpers"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -22,7 +22,10 @@
         <muxc:StackLayout x:Name="HorizontalStackLayout"
                           Orientation="Horizontal"
                           Spacing="8"/>
-        <conv:BytesToImageConverter x:Key="ImageConverter"/>
+        <msConverters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <msConverters:BoolToVisibilityConverter x:Key="BoolToInvisibilityConverter"
+                                                TrueValue="Collapsed"
+                                                FalseValue="Visible"/>
     </UserControl.Resources>
 
     <Border Background="{ThemeResource AcrylicInAppFillColorDefaultBrush}"
@@ -40,32 +43,86 @@
 
              <!--Parts-->
             <Grid Margin="15,0,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
 
                 <!-- Parts-->
-                <ItemsControl ItemsSource="{Binding Parts}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    
+                    <ItemsControl ItemsSource="{Binding Parts}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!--  -->
+                    <ListView ItemsSource="{Binding Slides}"
+                              CanDragItems="True"
+                              DragItemsStarting="ListView_DragItemsStarting"
+                              Visibility="{Binding AreSlidesLoading, Converter={StaticResource BoolToInvisibilityConverter}}"
+                              Margin="8,0"
+                              Grid.Column="1">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding}"
+                                           Height="200"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                    <!--<ScrollViewer HorizontalScrollBarVisibility="Visible"
+                                  VerticalScrollBarVisibility="Disabled"
+                                  Grid.Column="1">
+                        <muxc:ItemsRepeater ItemsSource="{Binding Slides}"
+                                            DragStarting="ItemsRepeater_DragStarting"
+                                            Layout="{StaticResource HorizontalStackLayout}"
+                                            Visibility="{Binding AreSlidesLoading, Converter={StaticResource BoolToInvisibilityConverter}}"
+                                            Margin="8,0">
+                            <muxc:ItemsRepeater.ItemTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding}"
+                                   Height="200"/>
+                                </DataTemplate>
+                            </muxc:ItemsRepeater.ItemTemplate>
+                        </muxc:ItemsRepeater>
+                    </ScrollViewer>-->
+                </Grid>
+
                 
                 <!-- Slides -->
-                <muxc:ItemsRepeater ItemsSource="{Binding Slides}"
-                                    Layout="{StaticResource HorizontalStackLayout}"
-                                    Margin="8,0">
-                    <muxc:ItemsRepeater.ItemTemplate>
-                        <DataTemplate>
-                            <Image Source="{Binding Converter={StaticResource ImageConverter}}"
-                                   Height="150"
-                                   Width="200"/>
-                        </DataTemplate>
-                    </muxc:ItemsRepeater.ItemTemplate>
-                </muxc:ItemsRepeater>
+                <Border Grid.Row="1"
+                        Background="Black"
+                        Opacity="0.5"
+                        Visibility="{Binding AreSlidesLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <ProgressRing IsActive="{Binding AreSlidesLoading}"/>
+                </Border>
+                <ScrollViewer HorizontalScrollBarVisibility="Visible"
+                              VerticalScrollBarVisibility="Disabled"
+                              Grid.Row="1">
+                    <!--<muxc:ItemsRepeater ItemsSource="{x:Bind helpers:BindingFuncs.Subset(ViewModel.Slides, ViewModel.SelectedPart.SlideIndexes)}"
+                                        Layout="{StaticResource HorizontalStackLayout}"
+                                        Visibility="{Binding AreSlidesLoading, Converter={StaticResource BoolToInvisibilityConverter}}"
+                                        Margin="8,0">
+                        <muxc:ItemsRepeater.ItemTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding}" 
+                                   Height="200"/>
+                            </DataTemplate>
+                        </muxc:ItemsRepeater.ItemTemplate>
+                    </muxc:ItemsRepeater>-->
+                </ScrollViewer>
             </Grid>
         </muxc:Expander>
     </Border>

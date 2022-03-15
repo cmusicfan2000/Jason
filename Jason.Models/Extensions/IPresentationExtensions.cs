@@ -1,66 +1,59 @@
 ﻿using Syncfusion.Presentation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace Jason.Models.Extensions
 {
     public static class IPresentationExtensions
     {
-        #region Fields
-        private static StorageFolder localFolder = null;
-        #endregion
-
-        #region Methods
         /// <summary>
         /// Converts a presentation to images
         /// </summary>
         /// <param name="presentation"></param>
         /// <returns></returns>
-        public static async byte[] ToImagesAsync(this IPresentation presentation, string presentationName)
+        public static async Task<BitmapImage[]> ToImagesAsync(this IPresentation presentation, string presentationName)
         {
-            if (localFolder == null)
-                localFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("images", CreationCollisionOption.OpenIfExists);
+            // Return an empty array if there are no slides to convert
+            if (presentation?.Slides?.Count == null ||
+                presentation.Slides.Count < 1)
+                return new BitmapImage[0];
+            if (string.IsNullOrEmpty(presentationName))
+                throw new ArgumentNullException(nameof(presentationName));
 
-            
+            // Get or Create the images folder if it doesn't already exist
+            StorageFolder localFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync("images", CreationCollisionOption.OpenIfExists);
+
+            // Get or Create a folder for the presentation
+            StorageFolder presentationFolder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(presentationName, CreationCollisionOption.OpenIfExists);
+
+            // Create images for each slide
+            BitmapImage[] images = new BitmapImage[presentation.Slides.Count];
+            for (int i = 0; i < presentation.Slides.Count; i++)
+            {
+                images[i] = await ConvertSlideAsync(presentation.Slides[i], i, presentationFolder);
+            }
+
+            return images;
         }
-
 
         /// <summary>
         /// Convert a slide as image
         /// </summary>
         /// <param name="slide">The slide to be converted</param>
         /// <returns></returns>
-        private static async Task<String> ConvertSlide(IPresentation presentation, ISlide slide, StorageFolder location)
+        private static async Task<BitmapImage> ConvertSlideAsync(ISlide slide, int slideIndex, StorageFolder location)
         {
-            
+            string mainImageFileName = $"Slide {slideIndex + 1}.jpg";
 
-            string mainImageFileName;
-            string thumbImageFileName;
-            if (presentation.Slides[0].SlideNumber > 0)
-            {
-                mainImageFileName = "Slide " + slide.SlideNumber.ToString() + ".jpg";
-                thumbImageFileName = "ThumbSlide " + slide.SlideNumber.ToString() + ".jpg";
-            }
-            else
-            {
-                mainImageFileName = "Slide " + (slide.SlideNumber + 1) + ".jpg";
-                thumbImageFileName = "ThumbSlide " + (slide.SlideNumber + 1) + ".jpg";
-            }
+            // Create files for each of the images
+            StorageFile mainImageStorageFile = await location.CreateFileAsync(mainImageFileName, CreationCollisionOption.ReplaceExisting);
 
-            StorageFile mainImageStorageFile = await _localFolder.CreateFileAsync(mainImageFileName, CreationCollisionOption.ReplaceExisting);
-            StorageFile thumbImageStorageFile = await _localFolder.CreateFileAsync(thumbImageFileName, CreationCollisionOption.ReplaceExisting);
-            RenderingOptions options = new RenderingOptions() { ScaleX = 0.25f, ScaleY = 0.25f };
-            await slide.SaveAsImageAsync(mainImageStorageFile, _cancellationToken.Token);
-            await slide.SaveAsImageAsync(thumbImageStorageFile, options, _cancellationToken.Token);
-            if (LoadingStatusCanvas != null && slide.SlideNumber == _slideCount)
-                LoadingStatusCanvas.Visibility = Visibility.Collapsed;
-            _convertedSlides = slide.SlideNumber;
-            return mainImageStorageFile.Path;
+            // Save the images
+            await slide.SaveAsImageAsync(mainImageStorageFile);
+
+            return new BitmapImage(new Uri(mainImageStorageFile.Path));
         }
-        #endregion
     }
 }

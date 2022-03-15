@@ -1,4 +1,5 @@
-﻿using Jason.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Jason.Models;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Syncfusion.Presentation;
 using System;
@@ -14,7 +15,7 @@ using Windows.UI.Xaml.Input;
 
 namespace Jason.ViewModels.WorshipServices
 {
-    public class WorshipServiceViewModel : ViewModel
+    public class WorshipServiceViewModel : ObservableObject
     {
         #region Fields
         private readonly WorshipService model;
@@ -32,7 +33,7 @@ namespace Jason.ViewModels.WorshipServices
                 if (model.Order.Date != value)
                 {
                     model.Order.Date = value;
-                    InvokePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -48,7 +49,7 @@ namespace Jason.ViewModels.WorshipServices
                 if (model.Order.Focus != value)
                 {
                     model.Order.Focus = value;
-                    InvokePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }

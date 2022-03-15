@@ -1,4 +1,5 @@
-﻿using Jason.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Jason.Models;
 using Jason.Models.Repositories;
 using Jason.ViewModels.WorshipServices;
 using System;
@@ -9,7 +10,7 @@ using Windows.UI.Xaml.Input;
 
 namespace Jason.ViewModels
 {
-    public class MainViewModel : ViewModel
+    public class MainViewModel : ObservableObject
     {
         #region Fields
         private readonly RecentFilesRepository recentServicesRepo = new RecentFilesRepository("Services");

@@ -20,7 +20,7 @@ namespace Jason.ViewModels.WorshipServices
                 if (model.Title != value)
                 {
                     model.Title = value;
-                    InvokePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }
@@ -36,7 +36,7 @@ namespace Jason.ViewModels.WorshipServices
                 if (model.Presenter != value)
                 {
                     model.Presenter = value;
-                    InvokePropertyChanged();
+                    OnPropertyChanged();
                 }
             }
         }

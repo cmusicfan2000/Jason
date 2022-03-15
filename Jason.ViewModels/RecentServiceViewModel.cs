@@ -1,9 +1,10 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using Windows.Storage;
 
 namespace Jason.ViewModels
 {
-    public class RecentServiceViewModel : ViewModel
+    public class RecentServiceViewModel : ObservableObject
     {
         #region Fields
         private readonly StorageFile model;

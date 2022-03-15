@@ -1,9 +1,7 @@
 ﻿using Jason.Models;
-using Syncfusion.Drawing;
 using Syncfusion.Presentation;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Jason.ViewModels.WorshipServices
 {

@@ -1,10 +1,10 @@
-﻿using Syncfusion.Presentation;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Syncfusion.Presentation;
 using System;
-using System.Threading.Tasks;
 
 namespace Jason.ViewModels.WorshipServices
 {
-    public abstract class WorshipServicePartViewModel : ViewModel
+    public abstract class WorshipServicePartViewModel : ObservableObject
     {
         #region Properties
         /// <summary>
