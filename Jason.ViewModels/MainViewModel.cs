@@ -85,7 +85,7 @@ namespace Jason.ViewModels
         private async void OnOpenServiceCommandExecuteRequested(XamlUICommand sender, ExecuteRequestedEventArgs args)
         {
             var repo = new WorshipServiceRepository();
-            WorshipService ws = await repo.GetWorshipServiceAsync();
+            WorshipService ws = await Models.WorshipService.LoadAsync();
 
             if (ws != null)
             {

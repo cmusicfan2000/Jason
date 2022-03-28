@@ -48,7 +48,7 @@ namespace Jason.ViewModels.WorshipServices
 
                 if (wsi != null)
                 {
-                    using (MemoryStream imageStream = wsi.AsStream())
+                    using (MemoryStream imageStream = wsi.AsMemoryStream())
                     {
                         slide.Background.Fill.FillType = FillType.Picture;
                         slide.Background.Fill.PictureFill.ImageBytes = imageStream.ToArray();

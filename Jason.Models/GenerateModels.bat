@@ -1,2 +1,2 @@
 cd "C:\Program Files (x86)\Microsoft SDKs\Windows\v10.0A\bin\NETFX 4.8 Tools"
-xsd /classes C:\Users\grego\source\repos\Jason\Jason.Models\XML\WorshipServiceOrder.xsd -outputdir:C:\Users\grego\source\repos\Jason\Jason.Models
+xsd /classes C:\Users\grego\source\repos\Jason\Jason.Models\XML\WorshipServiceOrder.xsd /namespace:Jason.Models -outputdir:C:\Users\grego\source\repos\Jason\Jason.Models

@@ -31,10 +31,25 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+
+  <xs:complexType name="Translation">
+    <xs:attribute name="Abbreviation"
+                  type="xs:string"
+                  use="required"/>
+    <xs:attribute name="FullName"
+                  type="xs:string"
+                  use="required"/>
+  </xs:complexType>
   
   <xs:complexType name="Scripture">
     <xs:complexContent>
       <xs:extension base="ImageBackground">
+        <xs:choice>
+          <xs:element name="Translation"
+                      type="Translation"
+                      maxOccurs="1"
+                      minOccurs="1"/>
+        </xs:choice>
         <xs:attribute name="Book"
                       use="required" >
           <xs:simpleType>
@@ -111,18 +126,6 @@
         <xs:attribute name="Reference"
                       type="xs:string"
                       use="required" />
-        <xs:attribute name="Translation"
-                      use="required">
-          <xs:simpleType>
-            <xs:restriction base="xs:string">
-              <xs:enumeration value="MSG"/>
-              <xs:enumeration value="NASB"/>
-              <xs:enumeration value="NET"/>
-              <xs:enumeration value="NIV"/>
-              <xs:enumeration value="VOICE"/>
-            </xs:restriction>
-          </xs:simpleType>
-        </xs:attribute>
         <xs:attribute name="Text"
                       type="xs:string"
                       use="optional"/>
@@ -207,15 +210,9 @@
                       type="FamilyNewsAndPrayer"/>
         </xs:choice>
       </xs:sequence>
-      <xs:attribute name="Date"
-                    type="xs:date"
-                    use="required" />
       <xs:attribute name="ThemeColor"
                     type="color"
                     use="required" />
-      <xs:attribute name="Focus"
-                    type="xs:string"
-                    use="optional" />
     </xs:complexType>
   </xs:element>
 </xs:schema>

@@ -2,21 +2,28 @@
 
 namespace Jason.Models
 {
-    public class WorshipServiceImage
+    public sealed class WorshipServiceImage : IWorshipServiceImage
     {
+        #region fields
         private byte[] data;
+        #endregion
 
+        #region Properties
         /// <summary>
         /// Gets or sets the name of the image
         /// </summary>
         public string Name { get; set; }
+        #endregion
 
+        #region Constructor
         public WorshipServiceImage(string name, Stream data)
         {
             Name = name;
             SetData(data);
         }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// Sets the image to the data contained in the stream
         /// </summary>
@@ -38,6 +45,7 @@ namespace Jason.Models
         /// <returns>
         /// The image data as a <see cref="Stream"/>
         /// </returns>
-        public MemoryStream AsStream() => new MemoryStream(data);
+        public MemoryStream AsMemoryStream() => new MemoryStream(data);
+        #endregion
     }
 }
