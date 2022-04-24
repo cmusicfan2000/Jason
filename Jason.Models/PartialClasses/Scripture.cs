@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace Jason.Models
 {
@@ -39,7 +38,7 @@ namespace Jason.Models
                  scripture == null ? null
                                    : new Scripture()
                                     {
-                                        Image = scripture.Image,
+                                        BackgroundImageName = scripture.BackgroundImageName,
                                         Book = scripture.Book,
                                         Reference = scripture.Reference,
                                         Text = scripture.Text,

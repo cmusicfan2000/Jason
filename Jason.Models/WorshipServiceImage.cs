@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Jason.Models
 {
@@ -18,6 +19,9 @@ namespace Jason.Models
         #region Constructor
         public WorshipServiceImage(string name, Stream data)
         {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentNullException(nameof(name));
+
             Name = name;
             SetData(data);
         }
@@ -32,10 +36,17 @@ namespace Jason.Models
         /// </param>
         public void SetData(Stream source)
         {
-            using (var memoryStream = new MemoryStream())
+            if (source == null)
+                data = new byte[] { };
+            else if (!source.CanRead)
+                throw new AccessViolationException("The provided stream cannot be read");
+            else
             {
-                source.CopyTo(memoryStream);
-                data = memoryStream.ToArray();
+                using (var memoryStream = new MemoryStream())
+                {
+                    source.CopyTo(memoryStream);
+                    data = memoryStream.ToArray();
+                }
             }
         }
 

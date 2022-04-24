@@ -27,7 +27,7 @@ namespace Jason.Models
                       placeholder == null ? null
                                           : new Placeholder()
                                             {
-                                                Image = placeholder.Image,
+                                                BackgroundImageName = placeholder.BackgroundImageName,
                                                 Name = placeholder.Name
                                             };
         #endregion

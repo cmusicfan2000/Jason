@@ -15,7 +15,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 
-namespace Jason.Models
+namespace Jason.Models.Repositories
 {
     /// <summary>
     /// Provides access to worship service data stored in a .jws file
@@ -26,7 +26,7 @@ namespace Jason.Models
     /// - Images   - A directory containing images referenced by the order of worship
     /// - Songs    - A directory containing slideshows with songs referenced by the order of worship
     /// </remarks>
-    public class JWSWorshipServiceAccessor : IWorshipServiceAccessor
+    public class JWSRepository : IWorshipServiceRepository
     {
         /// <summary>
         /// Creates a new <see cref="IWorshipServiceOrder"/>
@@ -102,7 +102,8 @@ namespace Jason.Models
                         {
                             using (Stream imageEntryStream = imageEntry.Open())
                             {
-                                ib.Image = new WorshipServiceImage(ib.BackgroundImageName, imageEntryStream);
+                                throw new NotImplementedException();
+                                //ib.Image = new WorshipServiceImage(ib.BackgroundImageName, imageEntryStream);
                             }
                         }
                     }
@@ -121,11 +122,12 @@ namespace Jason.Models
                                 using (MemoryStream ms = new MemoryStream())
                                 {
                                     s.CopyTo(ms);
-                                    song.Presentation = new PowerpointPresentation()
-                                    { 
-                                        Name = song.Slideshow,
-                                        Presentation = Presentation.Open(ms)
-                                    };
+                                    throw new NotImplementedException();
+                                    //song.Presentation = new PowerpointPresentation()
+                                    //{ 
+                                    //    Name = song.Slideshow,
+                                    //    Presentation = Presentation.Open(ms)
+                                    //};
                                 }
                             }
                         }

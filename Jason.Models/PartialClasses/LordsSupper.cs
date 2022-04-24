@@ -13,6 +13,7 @@ namespace Jason.Models
 
         /// <summary>
         /// Gets or sets the scripture to be read during the Lord's Supper
+        /// as an <see cref="IScripture"/>
         /// </summary>
         [XmlIgnore()]
         IScripture ILordsSupper.Scripture

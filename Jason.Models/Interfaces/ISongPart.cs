@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Jason.Models
+﻿namespace Jason.Models
 {
     public interface ISongPart
     {
@@ -10,8 +8,8 @@ namespace Jason.Models
         string Name { get; set; }
 
         /// <summary>
-        /// Gets a collection of slide numbers to include in the part
+        /// Gets the space-seperated slide numbers to include in the part
         /// </summary>
-        ICollection<int> SlideNumbers { get; }
+        string Slides { get; set; } 
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Jason.Models
 {
-    public class PowerpointPresentation : IPowerpointPresentation
+    public sealed class PowerpointPresentation : IPowerpointPresentation
     {
         /// <summary>
         /// Gets or sets the name of the presentation

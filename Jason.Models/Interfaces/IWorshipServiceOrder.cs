@@ -11,8 +11,8 @@ namespace Jason.Models
         string ThemeColor { get; set; }
 
         /// <summary>
-        /// Gets a collection of objects representing parts of a worship service order
+        /// Gets an array of objects representing parts of a worship service order
         /// </summary>
-        ICollection<IWorshipServicePart> Parts { get; }
+        IWorshipServicePart[] Parts { get; }
     }
 }

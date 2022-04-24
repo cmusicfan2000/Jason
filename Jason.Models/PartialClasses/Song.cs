@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
+﻿using System.Linq;
 using System.Xml.Serialization;
 
 namespace Jason.Models
@@ -38,37 +35,17 @@ namespace Jason.Models
             }
         }
 
-        private ICollection<ISongPart> parts;
         /// <summary>
-        /// Gets a collection of parts in the song
+        /// Gets an array of parts in the song
         /// </summary>
         [XmlIgnore()]
-        public ICollection<ISongPart> Parts
+        public ISongPart[] Parts
         {
-            get
-            {
-                if (parts == null)
-                {
-                    ObservableCollection<ISongPart> observableParts = new ObservableCollection<ISongPart>(Part);
-                    observableParts.CollectionChanged += OnPartsCollectionChanged;
-                    parts = observableParts;
-                }
-
-                return parts;
-            }
-        }
-
-        private IPowerpointPresentation presentation;
-        /// <summary>
-        /// Gets or sets the presentation associated with this song
-        /// </summary>
-        public IPowerpointPresentation Presentation
-        {
-            get => presentation;
+            get => Part;
             set
             {
-                presentation = value;
-                Slideshow = presentation.Name;
+                Part = value.Select(isp => SongPart.FromInterface(isp))
+                            .ToArray();
             }
         }
         #endregion
@@ -89,19 +66,12 @@ namespace Jason.Models
                             : new Song()
                             {
                                 SongBookNumber = song.SongBookNumber,
-                                Presentation = song.Presentation,
+                                Slideshow = song.Slideshow,
                                 Title = song.Title,
-                                Part = song.Parts.Select(p => SongPart.FromInterface(p)).ToArray()
+                                Part = song.Parts
+                                           .Select(p => SongPart.FromInterface(p))
+                                           .ToArray()
                             };
-        #endregion
-
-        #region Event Handlers
-        private void OnPartsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            Part = (sender as IEnumerable<ISongPart>)?.Select(isp => SongPart.FromInterface(isp))
-                                                     .ToArray()
-                                                     ?? new SongPart[] { };
-        }
         #endregion
     }
 }

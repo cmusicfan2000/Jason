@@ -2,7 +2,7 @@
 
 namespace Jason.Models
 {
-    public interface IWorshipServiceAccessor
+    public interface IWorshipServiceRepository
     {
         /// <summary>
         /// Loads an existing <see cref="IWorshipServiceOrder"/>

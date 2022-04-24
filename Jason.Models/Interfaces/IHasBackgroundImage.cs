@@ -6,8 +6,8 @@
     public interface IHasBackgroundImage
     {
         /// <summary>
-        /// Gets or sets the background image
+        /// Gets or sets the name of the background image
         /// </summary>
-        IWorshipServiceImage Image { get; set; }
+        string BackgroundImageName { get; set; }
     }
 }

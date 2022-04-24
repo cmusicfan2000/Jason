@@ -1,7 +1,4 @@
-﻿using Syncfusion.Presentation;
-using System.Collections.Generic;
-
-namespace Jason.Models
+﻿namespace Jason.Models
 {
     /// <summary>
     /// Represents a song in a worship service
@@ -14,7 +11,7 @@ namespace Jason.Models
         ushort? SongBookNumber { get; set; }
 
         /// <summary>
-        /// Gets or sets the title
+        /// Gets or sets the title of the song
         /// </summary>
         string Title { get; set; }
 
@@ -24,13 +21,8 @@ namespace Jason.Models
         string Slideshow { get; set; }
 
         /// <summary>
-        /// Gets or sets the presentation associated with this song
+        /// Gets an array of parts in the song
         /// </summary>
-        IPowerpointPresentation Presentation { get; set; }
-
-        /// <summary>
-        /// Gets a collection of parts in the song
-        /// </summary>
-        ICollection<ISongPart> Parts { get; }
+        ISongPart[] Parts { get; }
     }
 }
