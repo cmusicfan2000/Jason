@@ -1,5 +1,4 @@
-﻿using Jason.Models.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Jason.Models
@@ -9,6 +8,11 @@ namespace Jason.Models
     /// </summary>
     public class WorshipService : IWorshipService
     {
+        /// <summary>
+        /// Gets or sets the location at which the service is stored
+        /// </summary>
+        public string Location { get; set; }
+
         /// <summary>
         /// Gets or sets the order or worship for the service
         /// </summary>

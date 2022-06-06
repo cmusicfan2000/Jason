@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Jason.Models
@@ -17,6 +18,18 @@ namespace Jason.Models
             get => Items?.OfType<IWorshipServicePart>()
                         .ToArray();
             set => Items = value;
+        }
+
+        /// <summary>
+        /// Serializes the order to a stream
+        /// </summary>
+        /// <param name="s">
+        /// The stream to which to seriale the object
+        /// </param>
+        public void Serialize(Stream s)
+        {
+            var serializer = new XmlSerializer(typeof(WorshipServiceOrder));
+            serializer.Serialize(s, this);
         }
     }
 }

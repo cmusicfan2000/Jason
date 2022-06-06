@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BA312F2B-5AD4-4F5C-8890-B4F660B57124}</ProjectGuid>
+    <ProjectGuid>{8CBA28FD-9B14-4FB0-8D66-15E1FC86F2F8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Jason.Interfaces</RootNamespace>
@@ -121,21 +121,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IStorageService.cs" />
     <EmbeddedResource Include="Properties\Jason.Interfaces.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.12</Version>
     </PackageReference>
-    <PackageReference Include="Syncfusion.Presentation.UWP">
-      <Version>19.4.0.53</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Jason.Enumerations\Jason.Enumerations.csproj">
-      <Project>{E9C01FD4-952E-4483-B24A-8DBE4385B6AF}</Project>
-      <Name>Jason.Enumerations</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

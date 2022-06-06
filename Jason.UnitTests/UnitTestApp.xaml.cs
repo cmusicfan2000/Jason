@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Jason.Interfaces.Services;
+using Jason.UnitTests.Mocks;
+using Jason.UnitTests.Services;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -22,14 +26,29 @@ namespace Jason.UnitTests
     /// </summary>
     sealed partial class App : Application
     {
+        public IServiceProvider Services { get; }
+
+        public new static App Current => (App)Application.Current;
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
         public App()
         {
+            Services = CnfigureServices();
+
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+        }
+
+        private static IServiceProvider CnfigureServices()
+        {
+            var services = new ServiceCollection();
+
+            services.AddSingleton<IStorageService, MockFilesService>();
+
+            return services.BuildServiceProvider();
         }
 
         /// <summary>

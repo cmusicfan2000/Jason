@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.IO;
 
 namespace Jason.Models
 {
@@ -14,5 +14,13 @@ namespace Jason.Models
         /// Gets an array of objects representing parts of a worship service order
         /// </summary>
         IWorshipServicePart[] Parts { get; }
+
+        /// <summary>
+        /// Serializes the order to a stream
+        /// </summary>
+        /// <param name="s">
+        /// The stream to which to seriale the object
+        /// </param>
+        void Serialize(Stream s);
     }
 }

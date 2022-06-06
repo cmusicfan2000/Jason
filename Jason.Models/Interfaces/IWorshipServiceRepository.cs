@@ -5,35 +5,39 @@ namespace Jason.Models
     public interface IWorshipServiceRepository
     {
         /// <summary>
-        /// Loads an existing <see cref="IWorshipServiceOrder"/>
+        /// Loads an existing <see cref="IWorshipService"/>
         /// asynchronously
         /// </summary>
         /// <returns>
-        /// A <see cref="Task"/> which returns a <see cref="IWorshipServiceOrder"/>
+        /// A <see cref="Task"/> which returns a <see cref="IWorshipService"/>
         /// when complete
         /// </returns>
-        Task<IWorshipServiceOrder> LoadAsync();
+        Task<IWorshipService> LoadAsync();
 
         /// <summary>
-        /// Creates a new <see cref="IWorshipServiceOrder"/>
-        /// asynchronously
+        /// Creates a new <see cref="IWorshipService"/>
         /// </summary>
         /// <returns>
-        /// A <see cref="Task"/> which returns a <see cref="IWorshipServiceOrder"/>
-        /// when complete
+        /// An empty <see cref="IWorshipService"/>
         /// </returns>
-        Task<IWorshipServiceOrder> CreateAsync();
+        IWorshipService Create();
 
         /// <summary>
-        /// Saves a <see cref="IWorshipServiceOrder"/>
-        /// asynchronously
+        /// Saves a <see cref="IWorshipService"/> asynchronously using the last
+        /// known location for it if it has been saved before
         /// </summary>
         /// <param name="service">
-        /// The <see cref="IWorshipServiceOrder"/> to save 
+        /// The <see cref="IWorshipService"/> to save 
         /// </param>
-        /// <returns>
-        /// A <see cref="Task"/> representing the save operation
-        /// </returns>
-        Task SaveAsync(IWorshipServiceOrder service);
+        Task SaveAsync(IWorshipService service);
+
+        /// <summary>
+        /// Saves a <see cref="IWorshipService"/> asynchronously to a
+        /// newly selected location
+        /// </summary>
+        /// <param name="service">
+        /// The <see cref="IWorshipService"/> to save 
+        /// </param>
+        Task SaveAsAsync(IWorshipService service);
     }
 }

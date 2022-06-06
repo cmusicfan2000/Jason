@@ -1,6 +1,6 @@
-﻿using Syncfusion.Presentation;
+﻿using Jason.Interfaces.Services;
+using Syncfusion.Presentation;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Compression;
@@ -12,7 +12,6 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Windows.Storage;
-using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 
 namespace Jason.Models.Repositories
@@ -23,43 +22,55 @@ namespace Jason.Models.Repositories
     /// <remarks>
     /// A .jws file is a .zip archive with the following entries:
     /// - order.xml - The order of worship
-    /// - Images   - A directory containing images referenced by the order of worship
-    /// - Songs    - A directory containing slideshows with songs referenced by the order of worship
+    /// - Images     - A directory containing images referenced by the order of worship
+    /// - Slideshows - A directory containing slideshows referenced by the order of worship
     /// </remarks>
     public class JWSRepository : IWorshipServiceRepository
     {
+        #region Fields
+        private const string imageFolderName = "Images";
+        private const string slideshowFolderName = "Slideshows";
+        private const string orderEntryName = "order.xml";
+        private const string extension = ".jws";
+        private readonly IStorageService filesService;
+        #endregion
+
+        #region Constructors
+        public JWSRepository(IStorageService filesService)
+        {
+            if (filesService == null)
+                throw new ArgumentNullException(nameof(filesService));
+
+            this.filesService = filesService;
+        }
+        #endregion
+
+        #region Methods
         /// <summary>
-        /// Creates a new <see cref="IWorshipServiceOrder"/>
-        /// asynchronously
+        /// Creates a new <see cref="IWorshipService"/>
         /// </summary>
         /// <returns>
-        /// A <see cref="Task"/> which returns a <see cref="IWorshipServiceOrder"/>
-        /// when complete
+        /// An empty <see cref="IWorshipService"/>
         /// </returns>
-        public Task<IWorshipServiceOrder> CreateAsync()
+        public IWorshipService Create()
         {
-            throw new NotImplementedException();
+            return new WorshipService()
+            {
+                Order = new WorshipServiceOrder()
+            };
         }
 
         /// <summary>
-        /// Loads an existing <see cref="IWorshipServiceOrder"/>
+        /// Loads an existing <see cref="IWorshipService"/>
         /// asynchronously
         /// </summary>
         /// <returns>
-        /// A <see cref="Task"/> which returns a <see cref="IWorshipServiceOrder"/>
+        /// A <see cref="Task"/> which returns a <see cref="IWorshipService"/>
         /// when complete
         /// </returns>
-        public async Task<IWorshipServiceOrder> LoadAsync()
+        public async Task<IWorshipService> LoadAsync()
         {
-            // Obtain a file with the .jws extension
-            var picker = new FileOpenPicker()
-            {
-                ViewMode = PickerViewMode.List,
-                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
-            };
-            picker.FileTypeFilter.Add(".jws");
-
-            StorageFile storage = await picker.PickSingleFileAsync();
+            IStorageFile storage = await filesService.GetSingleFileAsync(extension);
             if (storage == null)
                 return null;
 
@@ -68,7 +79,7 @@ namespace Jason.Models.Repositories
             using (ZipArchive jws = new ZipArchive(stream.AsStreamForRead(), ZipArchiveMode.Read))
             {
                 // Load the order
-                ZipArchiveEntry entry = jws.GetEntry("order.xml");
+                ZipArchiveEntry entry = jws.GetEntry(orderEntryName);
                 if (entry == null)
                     throw new InvalidOperationException("Unable to load service. No order found in file.");
 
@@ -85,55 +96,38 @@ namespace Jason.Models.Repositories
                     var serializer = new XmlSerializer(typeof(WorshipServiceOrder));
                     WorshipServiceOrder order = serializer.Deserialize(doc.CreateReader()) as WorshipServiceOrder;
 
-                    // Load image and song presentation entries
-                    IEnumerable<ZipArchiveEntry> imageEntries = jws.Entries.Where(e => e.FullName.StartsWith("Images/") &&
-                                                                                       e.Name.ToLower().EndsWith(".jpg"));
-                    IEnumerable<ZipArchiveEntry> songEntries = jws.Entries.Where(e => e.FullName.StartsWith("Songs/") &&
-                                                                                      e.Name.ToLower().EndsWith(".pptx"));
+                    // Create the worship service object
+                    IWorshipService service = new WorshipService();
 
                     // load images
-                    foreach (ImageBackground ib in order.Items
-                                                        .OfType<ImageBackground>()
-                                                        .Where(x => !string.IsNullOrEmpty(x?.BackgroundImageName)))
+                    foreach (ZipArchiveEntry imageEntry in jws.Entries
+                                                              .Where(e => e.FullName.StartsWith($"{imageFolderName}/") &&
+                                                                          e.Name.ToLower().EndsWith(".jpg")))
                     {
-                        ZipArchiveEntry imageEntry = imageEntries.SingleOrDefault(ie => ie.Name == $"{ib.BackgroundImageName}.jpg");
-
-                        if (imageEntry != null)
+                        using (Stream imageEntryStream = imageEntry.Open())
                         {
-                            using (Stream imageEntryStream = imageEntry.Open())
-                            {
-                                throw new NotImplementedException();
-                                //ib.Image = new WorshipServiceImage(ib.BackgroundImageName, imageEntryStream);
-                            }
+                            service.Images.Add(new WorshipServiceImage(imageEntry.Name, imageEntryStream));
                         }
                     }
 
-                    // Load song presentations
-                    foreach (Song song in order.Parts
-                                                .OfType<Song>()
-                                                .Where(x => !string.IsNullOrEmpty(x?.Slideshow)))
+                    // Load presentations
+                    foreach (ZipArchiveEntry presentationEntry in jws.Entries
+                                                                     .Where(e => e.FullName.StartsWith($"{slideshowFolderName}/") &&
+                                                                                 e.Name.ToLower().EndsWith(".pptx")))
                     {
-                        ZipArchiveEntry songEntry = songEntries.SingleOrDefault(ie => ie.Name == $"{song.Slideshow}.pptx");
-
-                        if (songEntry != null)
+                        using (Stream presentationStream = presentationEntry.Open())
+                        using (MemoryStream ms = new MemoryStream())
                         {
-                            using (Stream songStream = songEntry.Open())
+                            presentationStream.CopyTo(ms);
+                            service.Presentations.Add(new PowerpointPresentation()
                             {
-                                using (MemoryStream ms = new MemoryStream())
-                                {
-                                    s.CopyTo(ms);
-                                    throw new NotImplementedException();
-                                    //song.Presentation = new PowerpointPresentation()
-                                    //{ 
-                                    //    Name = song.Slideshow,
-                                    //    Presentation = Presentation.Open(ms)
-                                    //};
-                                }
-                            }
+                                Name = presentationEntry.Name,
+                                Presentation = Presentation.Open(ms)
+                            });
                         }
                     }
 
-                    return order;
+                    return service;
                 }
             }
         }
@@ -148,11 +142,86 @@ namespace Jason.Models.Repositories
         /// <returns>
         /// A <see cref="Task"/> representing the save operation
         /// </returns>
-        public Task SaveAsync(IWorshipServiceOrder service)
+        public async Task SaveAsync(IWorshipService service)
         {
-            // TODO: Make sure to only output images that belong in the file. If the image is no longer being used remove/don't output it
+            if (service == null)
+                throw new ArgumentNullException(nameof(service));
 
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(service.Location))
+                await SaveAsAsync(service);
+            else
+            {
+                IStorageFile storage = await filesService.GetExistingFileAsync(service.Location);
+                if (storage != null)
+                {
+                    // Clear the contents of the stream
+                    using (Stream s = await storage.OpenStreamForWriteAsync())
+                    {
+                        s.SetLength(0);
+                        await s.FlushAsync();
+                    }
+
+                    await SaveServiceToZip(service, storage);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Saves a <see cref="IWorshipService"/> asynchronously to a
+        /// newly selected location
+        /// </summary>
+        /// <param name="service">
+        /// The <see cref="IWorshipService"/> to save 
+        /// </param>
+        public async Task SaveAsAsync(IWorshipService service)
+        {
+            if (service == null)
+                throw new ArgumentNullException(nameof(service));
+
+            IStorageFile storage = await filesService.GetSaveFileAsync(extension);
+            if (storage == null)
+                return;
+
+            if (service.Order == null)
+                throw new ArgumentException("Order cannot be null. The service must have an order defined.", nameof(service));
+
+            await SaveServiceToZip(service, storage);
+
+            service.Location = storage.Path;
+        }
+
+        private async Task SaveServiceToZip(IWorshipService service, IStorageFile storage)
+        {
+            using (Stream stream = await storage.OpenStreamForWriteAsync())
+            using (ZipArchive jws = new ZipArchive(stream, ZipArchiveMode.Update))
+            {
+                // Create an entry for the order
+                using (Stream s = jws.CreateEntry(orderEntryName)
+                                     .Open())
+                {
+                    service.Order.Serialize(s);
+                }
+
+                // Create image entries
+                foreach (IWorshipServiceImage image in service.Images)
+                {
+                    using (Stream s = jws.CreateEntry($"{imageFolderName}/{image.Name}")
+                                         .Open())
+                    {
+                        image.AsMemoryStream().CopyTo(s);
+                    }
+                }
+
+                // Create Presentation entries
+                foreach (IPowerpointPresentation presentation in service.Presentations)
+                {
+                    using (Stream s = jws.CreateEntry($"{slideshowFolderName}/{presentation.Name}")
+                                          .Open())
+                    {
+                        presentation.Presentation.Save(s);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -192,5 +261,6 @@ namespace Jason.Models.Repositories
                     throw new InvalidOperationException("Unable to load service. The order contained errors.");
             }
         }
+        #endregion
     }
 }
