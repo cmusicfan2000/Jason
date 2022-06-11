@@ -120,22 +120,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Enumerations\WorshipServicePartTypes.cs" />
     <Compile Include="Extensions\IPresentationExtensions.cs" />
-    <Compile Include="Interfaces\IHasBackgroundImage.cs" />
-    <Compile Include="Interfaces\ILordsSupper.cs" />
-    <Compile Include="Interfaces\IPlaceholder.cs" />
-    <Compile Include="Interfaces\IPowerpointPresentation.cs" />
-    <Compile Include="Interfaces\IScripture.cs" />
-    <Compile Include="Interfaces\ISermon.cs" />
-    <Compile Include="Interfaces\ISong.cs" />
-    <Compile Include="Interfaces\ISongPart.cs" />
-    <Compile Include="Interfaces\IWorshipService.cs" />
-    <Compile Include="Interfaces\IWorshipServiceRepository.cs" />
-    <Compile Include="Interfaces\IWorshipServicePart.cs" />
-    <Compile Include="Interfaces\ITranslation.cs" />
-    <Compile Include="Interfaces\IWorshipServiceImage.cs" />
-    <Compile Include="Interfaces\IWorshipServiceOrder.cs" />
     <Compile Include="PartialClasses\FamilyNewsAndPrayer.cs" />
     <Compile Include="PartialClasses\ImageBackground.cs" />
     <Compile Include="PartialClasses\LordsSupper.cs" />
@@ -177,6 +162,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Jason.Enumerations\Jason.Enumerations.csproj">
+      <Project>{418404cb-ab59-4f45-9d0a-65d8c777ec06}</Project>
+      <Name>Jason.Enumerations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Jason.Interfaces\Jason.Interfaces.csproj">
       <Project>{8cba28fd-9b14-4fb0-8d66-15e1fc86f2f8}</Project>
       <Name>Jason.Interfaces</Name>

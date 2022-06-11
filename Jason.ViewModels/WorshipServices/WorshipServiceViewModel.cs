@@ -1,10 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Jason.Enumerations;
+using Jason.Interfaces.Services;
+using Jason.Interfaces.WorshipService;
 using Jason.Models;
+using Jason.Services;
 using Microsoft.Toolkit.Uwp.Helpers;
 using Syncfusion.Presentation;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.Storage;
@@ -18,41 +24,14 @@ namespace Jason.ViewModels.WorshipServices
     public class WorshipServiceViewModel : ObservableObject
     {
         #region Fields
-        private readonly WorshipService model;
+        private readonly IWorshipService model;
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets or sets the date on which the order of worship will be used
+        /// Gets the name of the service
         /// </summary>
-        public DateTime Date
-        {
-            get => model.Order.Date;
-            set
-            {
-                if (model.Order.Date != value)
-                {
-                    model.Order.Date = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the focus of the service
-        /// </summary>
-        public string Focus
-        {
-            get => model.Order.Focus;
-            set
-            {
-                if (model.Order.Focus != value)
-                {
-                    model.Order.Focus = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        public string Name => model.Name;
 
         private Color themeColor;
         /// <summary>
@@ -118,7 +97,7 @@ namespace Jason.ViewModels.WorshipServices
         #endregion
 
         #region Constructor
-        public WorshipServiceViewModel(WorshipService model)
+        public WorshipServiceViewModel(IWorshipService model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
@@ -126,31 +105,47 @@ namespace Jason.ViewModels.WorshipServices
             this.model = model;
             parts = new ObservableCollection<WorshipServicePartViewModel>();
 
-            foreach (object item in model.Order.Items)
+            if (model.Order?.Parts?.Any() == true)
             {
-                if (item is LordsSupper lsItem)
-                    parts.Add(new LordsSupperViewModel(lsItem));
-                else if (item is Scripture sItem)
-                    parts.Add(new ScriptureViewModel(sItem));
-                else if (item is Sermon srItem)
-                    parts.Add(new SermonViewModel(srItem));
-                else if (item is Song songItem)
+                foreach (IWorshipServicePart part in model.Order.Parts)
                 {
-                    if (model.Songs.TryGetValue(songItem.Slideshow, out IPresentation songPresentation))
-                        parts.Add(new SongViewModel(songItem, songPresentation));
-                    else
-                        parts.Add(new SongViewModel(songItem));
+                    switch (part.Type)
+                    {
+                        case WorshipServicePartTypes.LordsSupper:
+                            parts.Add(new LordsSupperViewModel(part as ILordsSupper));
+                            break;
+                        case WorshipServicePartTypes.Scripture:
+                            parts.Add(new ScriptureViewModel(part as IScripture));
+                            break;
+                        case WorshipServicePartTypes.Sermon:
+                            parts.Add(new SermonViewModel(part as ISermon));
+                            break;
+                        case WorshipServicePartTypes.Song:
+                            {
+                                ISong song = part as ISong;
+                                IPowerpointPresentation pres = string.IsNullOrEmpty(song.Slideshow) ? null
+                                                                                                    : model.Presentations.SingleOrDefault(p => p.Name == song.Slideshow);
+                                if (pres == null)
+                                    parts.Add(new SongViewModel(song));
+                                else
+                                    parts.Add(new SongViewModel(song, pres.Presentation));
+
+                                break;
+                            }
+                        case WorshipServicePartTypes.FamilyNewsAndPrayer:
+                            parts.Add(new FamilyNewsAndPrayerViewModel());
+                            break;
+                        case WorshipServicePartTypes.Placeholder:
+                            parts.Add(new PlaceholderViewModel(part as IPlaceholder, model));
+                            break;
+                    }
                 }
-                else if (item is FamilyNewsAndPrayer)
-                    parts.Add(new FamilyNewsAndPrayerViewModel());
-                else if (item is Placeholder ph)
-                    parts.Add(new PlaceholderViewModel(ph, model));
             }
         }
         #endregion
 
         #region Methods
-        private async void ExportToPowerpointAsync(StorageFile target)
+        private async void ExportToPowerpointAsync(IStorageFile target)
         {
             if (target == null)
                 return;
@@ -188,15 +183,13 @@ namespace Jason.ViewModels.WorshipServices
         #region Event Handlers
         private async void OnGeneratePowerpointCommandExecuteRequested(XamlUICommand sender, ExecuteRequestedEventArgs args)
         {
-            var picker = new FileSavePicker()
-            {
-                CommitButtonText = "Generate",
-                SuggestedFileName = Date.ToShortDateString().Replace('/','-'),
-                SuggestedStartLocation = PickerLocationId.DocumentsLibrary
-            };
-            picker.FileTypeChoices.Add("Powerpoint Presentation", new string[] { ".pptx" });
+            IStorageService service = new PickerFilesService();
+            IDictionary<string, IList<string>> suggestedExtensions = new Dictionary<string, IList<string>>();
+            suggestedExtensions.Add("Powerpoint Presentation (.pptx)", new Collection<string>() { ".pptx" });
 
-            ExportToPowerpointAsync(await picker.PickSaveFileAsync());
+            ExportToPowerpointAsync(await service.GetSaveFileAsync(".pptx",
+                                                                   model.Name,
+                                                                   suggestedExtensions));
         }
         #endregion
     }

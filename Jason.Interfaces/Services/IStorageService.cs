@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace Jason.Interfaces.Services
@@ -23,14 +24,24 @@ namespace Jason.Interfaces.Services
         /// <summary>
         /// Gets an <see cref="IStorageFile"/> to which to save
         /// </summary>
-        /// <param name="extension">
+        /// <param name="defaultExtension">
         /// The file extension to use by default
+        /// </param>
+        /// <param name="suggestedName">
+        /// The suggested name of the file
+        /// </param>
+        /// <param name="suggestedExtensions">
+        /// An <see cref="IDictionary{TKey, TValue}"/> that contains a collection of valid file
+        /// types (extensions) that the user can use to save a file. Each element in this
+        /// collection maps a display name to a corresponding collection of file name extensions.
+        /// The key is a single string, the value is a list/vector of strings representing
+        /// one or more extension choices.
         /// </param>
         /// <returns>
         /// A task which returns an <see cref="IStorageFile"/>
         /// when complete
         /// </returns>
-        Task<IStorageFile> GetSaveFileAsync(string extension);
+        Task<IStorageFile> GetSaveFileAsync(string defaultExtension, string suggestedName, IDictionary<string, IList<string>> suggestedExtensions);
 
         /// <summary>
         /// Attempts to obtain a <see cref="IStorageFile"/> instance

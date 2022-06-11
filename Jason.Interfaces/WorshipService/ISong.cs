@@ -1,4 +1,4 @@
-﻿namespace Jason.Models
+﻿namespace Jason.Interfaces.WorshipService
 {
     /// <summary>
     /// Represents a song in a worship service

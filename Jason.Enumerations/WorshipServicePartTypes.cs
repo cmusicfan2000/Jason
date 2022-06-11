@@ -1,4 +1,4 @@
-﻿namespace Jason.Models
+﻿namespace Jason.Enumerations
 {
     public enum WorshipServicePartTypes
     {

@@ -1,6 +1,6 @@
 ﻿using Syncfusion.Presentation;
 
-namespace Jason.Models
+namespace Jason.Interfaces.WorshipService
 {
     public interface IPowerpointPresentation
     {

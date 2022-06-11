@@ -41,7 +41,7 @@ namespace Jason.ViewModels.WorshipServices
             {
                 AddToSection(partSection, theme, commingNext);
             }
-            catch(Exception e)
+            catch
             {
                 // Clear any slides from the section
                 partSection.Slides.Clear();

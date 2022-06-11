@@ -2,6 +2,7 @@
 using Syncfusion.Presentation;
 using System;
 using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -13,6 +14,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Jason.Interfaces.WorshipService;
 
 namespace Jason.Models.Repositories
 {
@@ -98,6 +100,8 @@ namespace Jason.Models.Repositories
 
                     // Create the worship service object
                     IWorshipService service = new WorshipService();
+                    service.Name = storage.Name;
+                    service.Location = storage.Path;
 
                     // load images
                     foreach (ZipArchiveEntry imageEntry in jws.Entries
@@ -142,28 +146,32 @@ namespace Jason.Models.Repositories
         /// <returns>
         /// A <see cref="Task"/> representing the save operation
         /// </returns>
-        public async Task SaveAsync(IWorshipService service)
+        public async Task<bool> SaveAsync(IWorshipService service)
         {
             if (service == null)
                 throw new ArgumentNullException(nameof(service));
 
+            bool completed = true;
+
             if (string.IsNullOrEmpty(service.Location))
-                await SaveAsAsync(service);
+                completed = await SaveAsAsync(service);
             else
             {
                 IStorageFile storage = await filesService.GetExistingFileAsync(service.Location);
-                if (storage != null)
-                {
-                    // Clear the contents of the stream
-                    using (Stream s = await storage.OpenStreamForWriteAsync())
-                    {
-                        s.SetLength(0);
-                        await s.FlushAsync();
-                    }
+                if (storage == null)
+                    throw new Exception("Unable to obtain save file");
 
-                    await SaveServiceToZip(service, storage);
+                // Clear the contents of the stream
+                using (Stream s = await storage.OpenStreamForWriteAsync())
+                {
+                    s.SetLength(0);
+                    await s.FlushAsync();
                 }
+
+                await SaveServiceToZip(service, storage);
             }
+
+            return completed;
         }
 
         /// <summary>
@@ -173,21 +181,28 @@ namespace Jason.Models.Repositories
         /// <param name="service">
         /// The <see cref="IWorshipService"/> to save 
         /// </param>
-        public async Task SaveAsAsync(IWorshipService service)
+        public async Task<bool> SaveAsAsync(IWorshipService service)
         {
             if (service == null)
                 throw new ArgumentNullException(nameof(service));
-
-            IStorageFile storage = await filesService.GetSaveFileAsync(extension);
-            if (storage == null)
-                return;
-
             if (service.Order == null)
                 throw new ArgumentException("Order cannot be null. The service must have an order defined.", nameof(service));
 
-            await SaveServiceToZip(service, storage);
+            IDictionary<string, IList<string>> suggestedExtensions = new Dictionary<string, IList<string>>();
+            suggestedExtensions.Add($"Jason Worship Service ({extension})",
+                                    new Collection<string>() { extension });
+            IStorageFile storage = await filesService.GetSaveFileAsync(extension,
+                                                                       service.Name,
+                                                                       suggestedExtensions);
 
+            if (storage == null)
+                return false;
+
+            await SaveServiceToZip(service, storage);
+            service.Name = storage.Name;
             service.Location = storage.Path;
+            
+            return true;
         }
 
         private async Task SaveServiceToZip(IWorshipService service, IStorageFile storage)

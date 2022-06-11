@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Jason.Models
+namespace Jason.Interfaces.WorshipService
 {
     public interface IWorshipServiceRepository
     {
@@ -29,7 +29,7 @@ namespace Jason.Models
         /// <param name="service">
         /// The <see cref="IWorshipService"/> to save 
         /// </param>
-        Task SaveAsync(IWorshipService service);
+        Task<bool> SaveAsync(IWorshipService service);
 
         /// <summary>
         /// Saves a <see cref="IWorshipService"/> asynchronously to a
@@ -38,6 +38,6 @@ namespace Jason.Models
         /// <param name="service">
         /// The <see cref="IWorshipService"/> to save 
         /// </param>
-        Task SaveAsAsync(IWorshipService service);
+        Task<bool> SaveAsAsync(IWorshipService service);
     }
 }

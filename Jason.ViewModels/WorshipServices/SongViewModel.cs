@@ -1,4 +1,5 @@
 ﻿using AsyncAwaitBestPractices.MVVM;
+using Jason.Interfaces.WorshipService;
 using Jason.Models.Extensions;
 using Jason.ViewModels.Extensions;
 using Jason.ViewModels.Powerpoint;
@@ -16,7 +17,7 @@ namespace Jason.ViewModels.WorshipServices
     public class SongViewModel : WorshipServicePartViewModel
     {
         #region Fields
-        private readonly Song model;
+        private readonly ISong model;
         private readonly IPresentation songPresentation;
         #endregion
 
@@ -42,16 +43,12 @@ namespace Jason.ViewModels.WorshipServices
         /// </summary>
         public ushort? BookNumber
         {
-            get => model.BookNumberSpecified ? (ushort?)model.BookNumber
-                                             : null;
+            get => model.SongBookNumber;
             set
             {
-                if (model.BookNumber != value)
+                if (model.SongBookNumber != value)
                 {
-                    model.BookNumberSpecified = value != null;
-                    if (value != null)
-                        model.BookNumber = (ushort)value;
-
+                    model.SongBookNumber = value;
                     OnPropertyChanged();
                 }
             }
@@ -123,17 +120,17 @@ namespace Jason.ViewModels.WorshipServices
         #endregion
 
         #region Constructor
-        public SongViewModel(Song model)
+        public SongViewModel(ISong model)
             : this(model, null) { }
 
-        public SongViewModel(Song model, IPresentation songPresentation)
+        public SongViewModel(ISong model, IPresentation songPresentation)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
 
             this.model = model;
             this.songPresentation = songPresentation;
-            parts = new ObservableCollection<SongPartViewModel>(model.Part.Select(p => new SongPartViewModel(p)));
+            parts = new ObservableCollection<SongPartViewModel>(model.Parts.Select(p => new SongPartViewModel(p)));
             selectedPart = parts.FirstOrDefault();
         }
         #endregion

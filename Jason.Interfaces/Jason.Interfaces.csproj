@@ -122,12 +122,35 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IStorageService.cs" />
+    <Compile Include="WorshipService\IHasBackgroundImage.cs" />
+    <Compile Include="WorshipService\ILordsSupper.cs" />
+    <Compile Include="WorshipService\IPlaceholder.cs" />
+    <Compile Include="WorshipService\IPowerpointPresentation.cs" />
+    <Compile Include="WorshipService\IScripture.cs" />
+    <Compile Include="WorshipService\ISermon.cs" />
+    <Compile Include="WorshipService\ISong.cs" />
+    <Compile Include="WorshipService\ISongPart.cs" />
+    <Compile Include="WorshipService\ITranslation.cs" />
+    <Compile Include="WorshipService\IWorshipService.cs" />
+    <Compile Include="WorshipService\IWorshipServiceImage.cs" />
+    <Compile Include="WorshipService\IWorshipServiceOrder.cs" />
+    <Compile Include="WorshipService\IWorshipServicePart.cs" />
+    <Compile Include="WorshipService\IWorshipServiceRepository.cs" />
     <EmbeddedResource Include="Properties\Jason.Interfaces.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.12</Version>
     </PackageReference>
+    <PackageReference Include="Syncfusion.Presentation.UWP">
+      <Version>19.4.0.53</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Jason.Enumerations\Jason.Enumerations.csproj">
+      <Project>{418404cb-ab59-4f45-9d0a-65d8c777ec06}</Project>
+      <Name>Jason.Enumerations</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

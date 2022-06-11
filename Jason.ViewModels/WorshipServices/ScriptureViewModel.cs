@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Jason.Enumerations;
+using Jason.Interfaces.WorshipService;
+using System;
 
 namespace Jason.ViewModels.WorshipServices
 {
     public class ScriptureViewModel : WorshipServicePartViewModel
     {
         #region Fields
-        private readonly Scripture model;
+        private readonly IScripture model;
         #endregion
 
         #region Properties
@@ -47,7 +49,7 @@ namespace Jason.ViewModels.WorshipServices
         /// <summary>
         /// Gets or sets the translation being referenced
         /// </summary>
-        public ScriptureTranslation Translation
+        public ITranslation Translation
         {
             get => model.Translation;
             set
@@ -85,7 +87,7 @@ namespace Jason.ViewModels.WorshipServices
         #endregion
 
         #region Constructor
-        public ScriptureViewModel(Scripture model)
+        public ScriptureViewModel(IScripture model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));

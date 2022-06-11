@@ -35,14 +35,13 @@
                            Visibility="{Binding WorshipService, Converter={StaticResource EmptyToVisibilityConverter}}">
                     <TextBlock.Inlines>
                         <Run Text="Worship Service for"/>
-                        <Run Text="{Binding WorshipService.Date, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:MM/dd/yyyy}'}"/>
+                        <Run Text="{Binding WorshipService.Name, Mode=OneWay, Converter={StaticResource StringFormatConverter}, ConverterParameter='{}{0:MM/dd/yyyy}'}"/>
                     </TextBlock.Inlines>
                 </TextBlock>
             </CommandBar.Content>
             <CommandBar.PrimaryCommands>
-                <AppBarButton Command="{Binding OpenServiceCommand}"
-                              Content="Open..."
-                              Icon="OpenLocal"/>
+                <AppBarButton Command="{Binding NewServiceCommand}"/>
+                <AppBarButton Command="{Binding OpenServiceCommand}"/>
                 <AppBarToggleButton x:Name="ShowHideSettings"
                                     Content="Settings"
                                     Icon="Setting"/>

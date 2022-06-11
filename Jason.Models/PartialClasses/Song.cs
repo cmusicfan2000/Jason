@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using Jason.Enumerations;
+using Jason.Interfaces.WorshipService;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Jason.Models

@@ -1,4 +1,4 @@
-﻿namespace Jason.Models
+﻿namespace Jason.Interfaces.WorshipService
 {
     /// <summary>
     /// Represents a part of a worship service which may have an image associated with it

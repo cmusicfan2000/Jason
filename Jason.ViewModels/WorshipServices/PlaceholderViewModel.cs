@@ -1,4 +1,5 @@
-﻿using Jason.Models;
+﻿using Jason.Interfaces.WorshipService;
+using Jason.Models;
 using Syncfusion.Presentation;
 using System.IO;
 using System.Linq;
@@ -11,8 +12,8 @@ namespace Jason.ViewModels.WorshipServices
     public class PlaceholderViewModel : WorshipServicePartViewModel
     {
         #region Fields
-        private readonly Placeholder model;
-        private readonly WorshipService serviceModel;
+        private readonly IPlaceholder model;
+        private readonly IWorshipService serviceModel;
         #endregion
 
         #region Properties
@@ -25,7 +26,7 @@ namespace Jason.ViewModels.WorshipServices
         #endregion
 
         #region Constructor
-        public PlaceholderViewModel(Placeholder model, WorshipService serviceModel)
+        public PlaceholderViewModel(IPlaceholder model, IWorshipService serviceModel)
         {
             this.model = model;
             this.serviceModel = serviceModel;
@@ -44,7 +45,7 @@ namespace Jason.ViewModels.WorshipServices
                 if (!imageName.EndsWith(".jpg"))
                     imageName += ".jpg";
 
-                WorshipServiceImage wsi = serviceModel.Images.SingleOrDefault(i => i.Name == imageName);
+                IWorshipServiceImage wsi = serviceModel.Images.SingleOrDefault(i => i.Name == imageName);
 
                 if (wsi != null)
                 {

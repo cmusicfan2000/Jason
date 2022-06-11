@@ -1,4 +1,6 @@
-﻿namespace Jason.Models
+﻿using Jason.Enumerations;
+
+namespace Jason.Interfaces.WorshipService
 {
     public interface IScripture : IHasBackgroundImage
     {

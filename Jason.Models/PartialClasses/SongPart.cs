@@ -1,4 +1,6 @@
-﻿namespace Jason.Models
+﻿using Jason.Interfaces.WorshipService;
+
+namespace Jason.Models
 {
     public partial class SongPart : ISongPart
     {

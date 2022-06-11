@@ -1,4 +1,6 @@
-﻿namespace Jason.Models
+﻿using Jason.Enumerations;
+
+namespace Jason.Interfaces.WorshipService
 {
     /// <summary>
     /// Represents a part of a worship service

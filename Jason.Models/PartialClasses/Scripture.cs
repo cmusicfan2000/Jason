@@ -1,4 +1,6 @@
-﻿using System.Xml.Serialization;
+﻿using Jason.Enumerations;
+using Jason.Interfaces.WorshipService;
+using System.Xml.Serialization;
 
 namespace Jason.Models
 {
@@ -20,6 +22,12 @@ namespace Jason.Models
             get => Item;
             set => Item = Models.Translation.FromInterface(value);
         }
+
+        Enumerations.ScriptureBook IScripture.Book
+        {
+            get => (Enumerations.ScriptureBook)this.Book;
+            set => this.Book = (ScriptureBook)value;
+        }
         #endregion
 
         #region Methods
@@ -39,7 +47,7 @@ namespace Jason.Models
                                    : new Scripture()
                                     {
                                         BackgroundImageName = scripture.BackgroundImageName,
-                                        Book = scripture.Book,
+                                        Book = (ScriptureBook)scripture.Book,
                                         Reference = scripture.Reference,
                                         Text = scripture.Text,
                                         Translation = scripture.Translation

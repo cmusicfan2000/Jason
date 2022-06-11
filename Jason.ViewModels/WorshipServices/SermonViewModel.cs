@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Jason.Interfaces.WorshipService;
+using System;
 
 namespace Jason.ViewModels.WorshipServices
 {
     public class SermonViewModel : WorshipServicePartViewModel
     {
         #region Fields
-        private readonly Sermon model;
+        private readonly ISermon model;
         #endregion
 
         #region Properties
@@ -46,7 +47,7 @@ namespace Jason.ViewModels.WorshipServices
         #endregion
 
         #region Constructor
-        public SermonViewModel(Sermon model)
+        public SermonViewModel(ISermon model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));

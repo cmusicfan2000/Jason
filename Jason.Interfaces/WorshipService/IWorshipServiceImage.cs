@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Jason.Models
+namespace Jason.Interfaces.WorshipService
 {
     public interface IWorshipServiceImage
     {

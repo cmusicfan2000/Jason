@@ -1,4 +1,5 @@
-﻿using Jason.ViewModels.Extensions;
+﻿using Jason.Interfaces.WorshipService;
+using Jason.ViewModels.Extensions;
 using Syncfusion.Presentation;
 using System;
 
@@ -12,7 +13,7 @@ namespace Jason.ViewModels.WorshipServices
         private const int scriptureMarginTop = 30;
         private const int maxCharactersPerSlide = 350;
 
-        private readonly LordsSupper model;
+        private readonly ILordsSupper model;
         #endregion
 
         #region Properties
@@ -41,7 +42,7 @@ namespace Jason.ViewModels.WorshipServices
         #endregion
 
         #region Constructor
-        public LordsSupperViewModel(LordsSupper model)
+        public LordsSupperViewModel(ILordsSupper model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));

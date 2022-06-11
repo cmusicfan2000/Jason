@@ -1,4 +1,6 @@
-﻿using System.Xml.Serialization;
+﻿using Jason.Enumerations;
+using Jason.Interfaces.WorshipService;
+using System.Xml.Serialization;
 
 namespace Jason.Models
 {

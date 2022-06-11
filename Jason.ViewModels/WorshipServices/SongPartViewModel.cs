@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Jason.Interfaces.WorshipService;
 using Jason.ViewModels.Powerpoint;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Jason.ViewModels.WorshipServices
     public class SongPartViewModel : ObservableObject
     {
         #region Fields
-        private readonly SongPart model;
+        private readonly ISongPart model;
         #endregion
 
         #region Properties
@@ -72,7 +73,7 @@ namespace Jason.ViewModels.WorshipServices
         #endregion
 
         #region Constructor
-        public SongPartViewModel(SongPart model)
+        public SongPartViewModel(ISongPart model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));

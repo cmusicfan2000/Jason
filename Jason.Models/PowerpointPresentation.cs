@@ -1,4 +1,5 @@
-﻿using Syncfusion.Presentation;
+﻿using Jason.Interfaces.WorshipService;
+using Syncfusion.Presentation;
 
 namespace Jason.Models
 {
